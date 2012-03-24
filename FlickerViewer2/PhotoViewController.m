@@ -16,10 +16,7 @@
 
 @property (strong, nonatomic) PhotosCacheController * cacheController;
 @property (readonly) dispatch_queue_t downloadQueue;
-@property (weak, nonatomic) IBOutlet UILabel *titleLable;
 
-// declaring this method here, so I can locate the implementation anywhere I want in this .m file
-- (void) setVisitButtonToMatchPhotoVacationPresence;
 
 @end
 
@@ -28,8 +25,9 @@
 @synthesize scrollView = _scrollView;
 @synthesize toolBar = _toolBar;
 @synthesize visitButton = _visitButton;
+@synthesize photoTitleLabel = _photoTitleLabel;
 @synthesize downloadQueue = _downloadQueue;
-@synthesize titleLable = _titleLable;
+
 @synthesize cacheController = _cacheController;
 @synthesize photoURL = _photoURL;
 @synthesize photoName = _photoName;
@@ -83,7 +81,7 @@
             if (photoFile) {
                 
                 // title for user
-                bSelf.titleLable.text = self.photoName;  
+                bSelf.photoTitleLabel.text = self.photoName;  
 
                 // set the image in the view
                 bSelf.imageView.image = [[UIImage alloc] initWithData:photoFile];    
@@ -119,6 +117,9 @@
                     //NSLog(@"%@ Zoom x %f zoom y %f zoom to %f", self.photoName, zoomX, zoomY, zoom);                    
                 }
             }
+            
+            // note how  so we don't show the button state before photo is loaded, we call this in the queue, after the photo is loaded.
+            [self setVisitButtonToMatchPhotoVacationPresence]; // do this after we load,
                         
             [spinner stopAnimating]; // make sure we stop, even if no photo file
               
@@ -142,7 +143,6 @@
         if(self.imageView.window) {
             // on screen, typical behavior for iPad with detail view behavior
             [self loadPhoto]; // actually get the image and display it  
-            [self setVisitButtonToMatchPhotoVacationPresence]; // do this after we load, so we don't show the button state before photo is loaded
         } else { // not on screen 
             self.imageView.image = nil; // save memory and used as prompt to load image when view does appear
         }        
@@ -152,13 +152,22 @@
 // based on photo presence in given VacationDocument, set button to display 'visit' or 'unvisit', 'vacation name',  
 // 
 - (void) setVisitButtonToMatchPhotoVacationPresence:(VacationDocument*) document {
-    if([document photoExists:self.photoId]) {
-        // exists in vacation, so can unvisit from this vacation
-        self.visitButton.title = [[NSString alloc] initWithFormat:@"Unvisit %@", document.vacationName];
+    
+    if(self.imageView.image) { // but only show the title if there's an image displayed]
+        self.visitButton.enabled =  YES; // becuase we disable it if no image
+        // visit or unvisit 
+        if([document photoExists:self.photoId]) {
+            // exists in vacation, so can unvisit from this vacation
+            self.visitButton.title = [[NSString alloc] initWithFormat:@"Unvisit %@", document.vacationName];
+        } else {
+            // does not exist in vacation, so can visit on this vacation
+            self.visitButton.title = [[NSString alloc] initWithFormat:@"Visit %@", document.vacationName];
+        }  
+        
     } else {
-        // does not exist in vacation, so can visit on this vacation
-        self.visitButton.title = [[NSString alloc] initWithFormat:@"Visit %@", document.vacationName];
-    }   
+        self.visitButton.title = @"     ";
+        self.visitButton.enabled =  NO;
+    }
 }
 
 
@@ -168,7 +177,7 @@
     
      // need vacationName to get managed document 
      // getSelectedVacationName always returns a name, default name very first time app runs
-    // otherwise returns a persisted version of user's selection
+     // otherwise returns a persisted version of user's selection
      NSString * vacationName = [Vacations getSelectedVacationName];
     
      [Vacations getVacation:vacationName done:^(VacationDocument *document) {
@@ -188,12 +197,12 @@
             // we have a photo on vacation so remove it
             // 
             [document removePhoto:self.photoId];
-            // update visit button accordingly
+            // update visit button to show we can Visit the place again
             [self setVisitButtonToMatchPhotoVacationPresence:document];
         } else { 
             // no photo, add it to vacation
             [document addPhoto:self.photoDictionary];
-            // update visit button accordingly
+            // update visit button to show we can Unvisit this place
             [self setVisitButtonToMatchPhotoVacationPresence:document];
         }        
     }];
@@ -217,16 +226,13 @@
     // this supports views, typically iPhone, where when we setPhoto above, the image was not yet on screen 
     if(!self.imageView.image && self.photoURL) { // as long as we don't have an image already but we do have the url for it
         [self loadPhoto];
-        [self setVisitButtonToMatchPhotoVacationPresence]; // do this after we load, so we don't show the button state before photo is loaded
-        [self.scrollView flashScrollIndicators]; // show that the view is scrollable - todo - not seeing this visible on screen, why ?
+        [self.scrollView flashScrollIndicators]; // show that the view is scrollable 
     } else {
-        // this will update button to reflect any changes in user's selected vacation
-        // cannot use kvo or notifications per present design since  the Vacations class only has class methods.
-        // but only do if there is an image displayed in the first place, otherwise we have a button saying 'visit 'selected vacation'
-        if(self.imageView.image) {
-            [self setVisitButtonToMatchPhotoVacationPresence]; 
-            [self.scrollView flashScrollIndicators]; // show that the view is scrollable -  todo - not seeing this visible on screen, why ?
-        }
+        // photo already loaded and image displayed,  
+        // this will update button to reflect any changes in user's selected vacation, while displaying this photo, such as by going to Vacation tab
+        // cannot use kvo or notifications per present design since  the Vacations class only has class methods.       
+        [self setVisitButtonToMatchPhotoVacationPresence]; 
+        [self.scrollView flashScrollIndicators]; // show that the view is scrollable -    
     }
 }
 
@@ -246,9 +252,9 @@
     
     dispatch_release(self.downloadQueue);
     
-    
-    [self setTitleLable:nil];
-        [super viewDidUnload];
+    [self setPhotoTitleLabel:nil];
+        
+    [super viewDidUnload];
 
 }
 

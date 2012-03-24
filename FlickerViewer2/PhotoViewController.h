@@ -20,6 +20,7 @@
 
 @property (weak, nonatomic) IBOutlet UIToolbar *toolBar;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *visitButton;
+@property (weak, nonatomic) IBOutlet UILabel *photoTitleLabel;
 
 - (void) loadPhoto;
 

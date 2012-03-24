@@ -57,8 +57,13 @@
             // we have a photo on vacation so remove it
             // 
             [document removePhoto:self.photoId];
-            // once removed, we can no longer add it back, so no need to show visit... also
+            // once removed, we can no longer add it back (from vacation plane), so no need to show visit... also
             self.imageView.image = nil;
+            // no image, no title
+            self.photoTitleLabel.text = @"";
+            
+            // this will update the visit button to reflect that there's no image
+            [self setVisitButtonToMatchPhotoVacationPresence];
             // 
             // todo - in iPhone, we should pop the view
             // note - right now, we are still showing the visit button's last state
