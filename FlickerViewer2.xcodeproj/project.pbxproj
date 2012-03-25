@@ -44,6 +44,7 @@
 		1F6FF6C41502A163008B5297 /* PlacesMapAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F6FF6C31502A163008B5297 /* PlacesMapAnnotation.m */; };
 		1F6FF6C71502D0EA008B5297 /* PhotosMapAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F6FF6C61502D0EA008B5297 /* PhotosMapAnnotation.m */; };
 		1F90606C15017D1300DD91D2 /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F90606B15017D1300DD91D2 /* MapViewController.m */; };
+		1F921FBE151F7EFE00D8A734 /* DTCustomColoredAccessory.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F921FBD151F7EFE00D8A734 /* DTCustomColoredAccessory.m */; };
 		1FB0D30B1518430C00703037 /* DetailViewSelectorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FB0D30A1518430C00703037 /* DetailViewSelectorController.m */; };
 		1FB0D30F1518442900703037 /* VacationPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FB0D30E1518442900703037 /* VacationPhotoViewController.m */; };
 		1FC14590150E4F7A00D9263D /* VacationShortCutTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FC1458F150E4F7A00D9263D /* VacationShortCutTableViewController.m */; };
@@ -117,6 +118,8 @@
 		1F6FF6C61502D0EA008B5297 /* PhotosMapAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotosMapAnnotation.m; sourceTree = "<group>"; };
 		1F90606A15017D1300DD91D2 /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
 		1F90606B15017D1300DD91D2 /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
+		1F921FBC151F7EFE00D8A734 /* DTCustomColoredAccessory.h */ = {isa = PBXFileReference; fileEncoding = 4; path = DTCustomColoredAccessory.h; sourceTree = "<group>"; };
+		1F921FBD151F7EFE00D8A734 /* DTCustomColoredAccessory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTCustomColoredAccessory.m; sourceTree = "<group>"; };
 		1FB0D3091518430C00703037 /* DetailViewSelectorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewSelectorController.h; sourceTree = "<group>"; };
 		1FB0D30A1518430C00703037 /* DetailViewSelectorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewSelectorController.m; sourceTree = "<group>"; };
 		1FB0D30D1518442900703037 /* VacationPhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VacationPhotoViewController.h; sourceTree = "<group>"; };
@@ -177,6 +180,8 @@
 		1F20E10514EF0A1000144B99 /* FlickerViewer2 */ = {
 			isa = PBXGroup;
 			children = (
+				1F921FBC151F7EFE00D8A734 /* DTCustomColoredAccessory.h */,
+				1F921FBD151F7EFE00D8A734 /* DTCustomColoredAccessory.m */,
 				1F20E10E14EF0A1000144B99 /* MIKAppDelegate.h */,
 				1F20E10F14EF0A1000144B99 /* MIKAppDelegate.m */,
 				1FB0D3091518430C00703037 /* DetailViewSelectorController.h */,
@@ -394,6 +399,7 @@
 				1F6E4F01151BE8A200ECE6FE /* Vacations.m in Sources */,
 				1F6E4F04151BE8F500ECE6FE /* FlickrFetcher.m in Sources */,
 				1F6E4F07151BE90C00ECE6FE /* VacationsTableViewController.m in Sources */,
+				1F921FBE151F7EFE00D8A734 /* DTCustomColoredAccessory.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

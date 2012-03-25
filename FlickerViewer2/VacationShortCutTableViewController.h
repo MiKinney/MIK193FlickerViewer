@@ -13,13 +13,19 @@
 //             one less touch required.  As per assignment, there is an extra seque, that being to show this view, which is really a toolbar, that should always
 //             by shown.  No Itineary and Tag window just for two cells.
 //  
+// note even though the storyboard defines these two static cells, I create the cells an set text and color programmatically
+//      and also do manual segue, all so I can use the DTCustomColoredAccessory... which is hard to do for static cells
+// 
 
 #import <UIKit/UIKit.h>
 
 
 @interface VacationShortCutTableViewController : UITableViewController
 
-// view will udpate to reflect newly opened vacation 
+// VacationsTableViewController segueways to this controller before a vacation opens
+// call this method to reflect any changes after vacation opens
+// 
+//
 - (void) vacationOpenedUpdate;
 
 @end

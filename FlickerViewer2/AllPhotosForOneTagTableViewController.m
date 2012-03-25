@@ -11,6 +11,7 @@
 #import "AllPhotosForOneTagTableViewController.h"
 #import "Tag.h"
 #import "Vacations.h"
+#import "DTCustomColoredAccessory.h"
 
 @interface AllPhotosForOneTagTableViewController()
 
@@ -157,6 +158,15 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
+    
+    // default accessory is black, which is invisible when I use blackbackground for cell
+    // this control is a custom accessory that use's same color as text label text 
+    //  
+    DTCustomColoredAccessory *accessory = [DTCustomColoredAccessory accessoryWithColor:cell.textLabel.textColor];
+    accessory.highlightedColor = cell.textLabel.highlightedTextColor; 
+    cell.accessoryView =accessory;
+    
+
     
    // hack - using my own locally created collection of photos 
    Photo *photo = [self.taggedPhotos objectAtIndex:[indexPath row]];

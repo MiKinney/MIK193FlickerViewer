@@ -11,6 +11,8 @@
 #import "MapViewController.h"
 #import "PlacesMapAnnotation.h"
 #import "MIKActivityIndicatorView.h"
+#import "DTCustomColoredAccessory.h"
+
 
 
 @interface PlacesTableViewController() <MapViewControllerDelegate, PhotosDataSourceDelegate>
@@ -123,6 +125,12 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     
+    // default accessory is black, which is invisible when I use blackbackground for cell
+    // this control is a custom accessory that use's same color as text label text 
+    //  
+    DTCustomColoredAccessory *accessory = [DTCustomColoredAccessory accessoryWithColor:cell.textLabel.textColor];
+    accessory.highlightedColor = cell.textLabel.highlightedTextColor; 
+    cell.accessoryView =accessory;
     
     // get dictionary item for this row from flicker place names we downloaded
     NSDictionary * place = (NSDictionary *) [self.topPlaces objectAtIndex:indexPath.row];  

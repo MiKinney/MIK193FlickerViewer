@@ -10,6 +10,7 @@
 #import "VacationsTableViewController.h"
 #import "VacationShortCutTableViewController.h"
 #import "Vacations.h"
+#import "DTCustomColoredAccessory.h"
 
 @interface VacationsTableViewController() <AddVacationViewControllerDelegate>
 
@@ -112,6 +113,13 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
+    
+    // default accessory is black, which is invisible when I use blackbackground for cell
+    // this control is a custom accessory that use's same color as text label text 
+    //  
+    DTCustomColoredAccessory *accessory = [DTCustomColoredAccessory accessoryWithColor:cell.textLabel.textColor];
+    accessory.highlightedColor = cell.textLabel.highlightedTextColor; 
+    cell.accessoryView =accessory;
     
     // display vacation name...
     cell.textLabel.text = [self.vacationNames objectAtIndex:indexPath.row]; 
