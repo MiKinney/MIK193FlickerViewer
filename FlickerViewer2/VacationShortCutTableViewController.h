@@ -19,4 +19,7 @@
 
 @interface VacationShortCutTableViewController : UITableViewController
 
+// view will udpate to reflect newly opened vacation 
+- (void) vacationOpenedUpdate;
+
 @end

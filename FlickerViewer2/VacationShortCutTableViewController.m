@@ -17,6 +17,23 @@
 
 @implementation VacationShortCutTableViewController
 
+// it's possible this controller loaded and displayed before the vacation was open
+// call this method to reflect any changes
+-(void) vacationOpenedUpdate {
+    
+    VacationDocument * document = [Vacations getOpenManagedVacation];
+    if(document) {
+        [self.navigationItem setTitle:document.vacationName];
+        // also enable ability to interact with table view
+        self.tableView.allowsSelection = YES;
+    } else {
+        // not open, don't display misleading titles
+        [self.navigationItem setTitle:@""];
+        // also disable ability to interact with table view
+        self.tableView.allowsSelection = NO;
+    }
+}
+
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad
@@ -32,13 +49,9 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    // for display purposes
-    // call getSelectedVacationName each time view will appear, 
-    // rather than on ViewDidLoad, because selection can change
-    VacationDocument * document = [Vacations getOpenManagedVacation];
-    if(document) {
-        [self.navigationItem setTitle:document.vacationName];
-    }
+    
+    [self vacationOpenedUpdate]; // everything we appear, in case something changed
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated

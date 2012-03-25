@@ -76,8 +76,15 @@
     {
         NSIndexPath * indexPath = self.tableView.indexPathForSelectedRow;
         [Vacations openVacation:[self.vacationNames objectAtIndex:indexPath.row] done:^(BOOL success) {
-            // todo - something with result if there's an error
-            // note it's possible the sequed to controller will appear before the document loads, but the other controllers managed that case
+            if(success) {
+                // after vacation opens have to update the sequed controller becuase by now it has already appeared.
+                id destinationController = [segue destinationViewController];
+                if([destinationController respondsToSelector:@selector(vacationOpenedUpdate)]) {
+                    [destinationController vacationOpenedUpdate];
+                }
+            } else {
+                // todo - something with result if there's an error
+            }
         }];
     }
 

@@ -215,6 +215,7 @@
     [super viewDidLoad];
     
     // Uncomment the following line to preserve selection between presentations.
+    // this will not work because we reload the table everytime view appears
     // self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.

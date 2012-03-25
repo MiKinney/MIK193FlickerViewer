@@ -190,12 +190,13 @@
 {
     [super viewDidLoad];    
     
-    // get this notification, viewDidLoad happens before app become active, so this will work.
-    // this did not work after adding tab controller into split view, app was active first
-    //  [[NSNotificationCenter  defaultCenter] addObserver:self.tableView selector:@selector(applicationDidBecomeActive) name:UIApplicationDidBecomeActiveNotification object:[UIApplication sharedApplication]];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
+    // fetch topplaces from flicker
+    // do this here and no on viewWillAppear, don't want to fetch from flicker everytime user tabs to this view
+    // 
+    [self refreshTopPlaces]; 
+ 
+    // preserve selection between presentations.
+     self.clearsSelectionOnViewWillAppear = NO;
     
 }
 
@@ -213,8 +214,8 @@
 {
     [super viewWillAppear:animated];
     
-    // fetch topplaces from flicker
-    [self refreshTopPlaces]; 
+       
+   
 }
 
 - (void)viewDidAppear:(BOOL)animated
