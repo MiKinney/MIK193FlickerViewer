@@ -67,12 +67,12 @@
     [super viewWillAppear:animated];
     
     // do this here rather than viewDidLoad, becuase getSelectedVacationName could change between appearances
-    [Vacations getVacation:[Vacations getSelectedVacationName] done:^(VacationDocument *document) {
-        self.vacationDocument = document;
+    self.vacationDocument = [Vacations getOpenManagedVacation];
+    if(self.vacationDocument) {
         [self setupFetchedResultsController];
-    }];
+        [self.navigationItem setTitle:self.vacationPlace];
+    }
     
-    [self.navigationItem setTitle:self.vacationPlace];
 }
 
 - (void)viewDidAppear:(BOOL)animated

@@ -10,16 +10,7 @@
 
 @implementation Vacations
 
-
-// a dictionary of open VacationsDocuments, keyed by vacationName
-// this is where we store our open vacatons
-+ (NSMutableDictionary *) myOpenVacations {
-    static NSMutableDictionary * vacations = nil;
-    if(!vacations) {
-        vacations = [[NSMutableDictionary alloc] init];
-    }    
-    return vacations;
-}
+static VacationDocument * managedVacation = nil;
 
 // URL to vacation directory, creates if non-existent, returns 'cached' value on subsequent calls, so to keep down 'disk' usage
 // 
@@ -74,7 +65,7 @@
     return vacationNames;
 }
 
-// true if vacation persisted,
+// true if vacation exists in file system,
 +(BOOL) vacationExists:(NSString *)vacationName {
     BOOL exists = NO;
     
@@ -89,34 +80,34 @@
     return exists;    
 }
 
-#define SELECTED_VACATION_NAME_KEY @"selectedVacationNameKey"
+#define LAST_OPEN_VACATION_NAME_KEY @"lastOpenedVacationNameKey"
 
 // note how the set and get class method use the store not only for peristance, but to avoid need of an instance variable
-+ (void) setSelectedVacationName:(NSString *)vacationName {
++ (void) persistLastOpenedVacationName:(NSString *)vacationName {
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults]; 
     NSString * persistedVacationName = [[NSMutableString alloc] initWithString:vacationName];
-    [defaults setObject:persistedVacationName forKey:SELECTED_VACATION_NAME_KEY];
+    [defaults setObject:persistedVacationName forKey:LAST_OPEN_VACATION_NAME_KEY];
     [defaults synchronize]; // save it    
 }
 
 // return persisted name
 // yes, this access's persisted store every time it's called... but should be fast enough
-+ (NSString *) getSelectedVacationName {
++ (NSString *) getLastOpenedVacationName {
     
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults]; 
-    NSString * selectedVacationName = [defaults stringForKey:SELECTED_VACATION_NAME_KEY];
+    NSString * selectedVacationName = [defaults stringForKey:LAST_OPEN_VACATION_NAME_KEY];
     if(!selectedVacationName) { // first time app runs, no string - since we don't have it defined in any bundle resource
         selectedVacationName = [[NSString alloc] initWithString:[Vacations getDefaultVacationName]];
         // persist it
-        [Vacations setSelectedVacationName:selectedVacationName];
+        [Vacations persistLastOpenedVacationName:selectedVacationName];
     }    
     return selectedVacationName;   
 }
 
 
 
-+ (void) getVacation:(NSString *)vacationName done:(void (^)(VacationDocument *))result {
-    
++ (void) createVacation:(NSString *) vacationName done:(void (^)(VacationDocument* document))result {
+
     // make sure called with valid name...
     NSMutableString * newVacationName;     
     if(!vacationName || vacationName.length == 0) {
@@ -126,34 +117,76 @@
         // passed param defined, use it 
         newVacationName = [[NSMutableString alloc] initWithString:vacationName];
     }
-    
-    VacationDocument * document = (VacationDocument*) [[Vacations myOpenVacations] objectForKey:newVacationName];
-    if(!document) {
-        // nothing open, note this inits the object, but it may or may not exist in the file system until after calling openVacation
-        document = [[VacationDocument alloc] initWithVacationName:newVacationName inDirectory:[Vacations vacationDirectory]];
-        // add to my collection of vacations
-        [[Vacations myOpenVacations] setValue:document forKey:newVacationName];
-    }      
-    
-    // this will openVacation (unless already open)
-    [document openVacation:^(BOOL success) {
-        if(success) {
-            // done
-            result(document); // new document
-        } else {
-            NSLog(@"%@ error opening vacation %@", NSStringFromSelector(_cmd), newVacationName);
-            result(nil); // bad document
-        }
-    }];
 
+    VacationDocument * newDocument = [[VacationDocument alloc] initWithVacationName:newVacationName inDirectory:[Vacations vacationDirectory]];
+
+    if(![[NSFileManager defaultManager] fileExistsAtPath:[newDocument.fileURL path]]) {
+        // create it
+        [newDocument saveToURL:newDocument.fileURL forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {
+            
+            if(success) {
+                result (newDocument);
+            } else {
+                result (nil);
+            }
+       }];         
+    } else {
+       // document already exists
+       result(newDocument); // success !
+    }
 }
 
-+ (void) removeVacation:(NSString *)vacationName done:(void (^)(BOOL))result {
-    id document = [[Vacations myOpenVacations] objectForKey:vacationName];
-    if(document) {
-        // todo - need to actually delete from persistEnt store !
-        [[Vacations myOpenVacations] removeObjectForKey:vacationName];
++ (void) openVacation:(NSString *)vacationName done:(void (^)(BOOL success))result  {
+    
+    BOOL success = NO;
+    
+    // if there's a managed vacation already, and it's not us, make sure it's closed, cause we're reusing managedVacation
+    if(managedVacation && (![managedVacation.vacationName isEqualToString:vacationName])) {
+        // only one managed vacation at a time... since 
+        VacationDocument * otherVacation = managedVacation; // we need to reuse the static value before this ones closed
+        managedVacation = nil; // force new document creation below...
+       [otherVacation closeWithCompletionHandler:^(BOOL success) {
+            // don't care  // no need to wait for response, since we're opening a different vacation next
+        }];
+    } 
+     
+    if(!managedVacation) { // no managedVacation at all, or there is one and it's us (because it's not the otherVacaton)
+        managedVacation = [[VacationDocument alloc] initWithVacationName:vacationName inDirectory:[Vacations vacationDirectory]];
     }
+    
+    if (managedVacation.documentState == UIDocumentStateClosed) {
+        // closed so have to open it to use it
+        [managedVacation openWithCompletionHandler:^(BOOL success) {  
+            if(success) {
+                // first time we open it, save it
+                [Vacations  persistLastOpenedVacationName:vacationName];
+            }
+              result (success);
+        }];
+    } else if (managedVacation.documentState == UIDocumentStateNormal) {
+        // the  database is already open and ready for use
+         // no need to persistLastOpenedVacationName, since that happened when we first opened it
+         result (success = YES);
+    } else if (managedVacation.documentState == UIDocumentStateInConflict) {
+        // todo handle conflicts, probably see this used in iCloud exercise ?
+        result (success = NO);//
+    }            
+ }
+
+
+// 
++ (VacationDocument *) getOpenManagedVacation  {
+    
+    if(managedVacation && managedVacation.documentState != UIDocumentStateClosed){
+        return  managedVacation;
+    }
+    
+    return nil;    
+}
+
+
++ (void) removeVacation:(NSString *)vacationName done:(void (^)(BOOL))result {
+  
     result(YES); // ok, even if did not exist...
 }
 

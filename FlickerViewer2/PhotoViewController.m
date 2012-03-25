@@ -175,15 +175,10 @@
 // find's it's own vacation name and document
 - (void) setVisitButtonToMatchPhotoVacationPresence {
     
-     // need vacationName to get managed document 
-     // getSelectedVacationName always returns a name, default name very first time app runs
-     // otherwise returns a persisted version of user's selection
-     NSString * vacationName = [Vacations getSelectedVacationName];
-    
-     [Vacations getVacation:vacationName done:^(VacationDocument *document) {
-         // this method does the actual work
-         [self setVisitButtonToMatchPhotoVacationPresence:document];
-     }];
+    VacationDocument * vacationDocument = [Vacations getOpenManagedVacation];
+    if(vacationDocument) { // make sure it's open
+        [self setVisitButtonToMatchPhotoVacationPresence:vacationDocument];
+    }
     
 }
 
@@ -191,8 +186,9 @@
 // 
 - (IBAction)visitButtonTouched:(UIBarButtonItem *)sender {
     
-    [Vacations getVacation:[Vacations getSelectedVacationName] done:^(VacationDocument *document) {
-        
+    VacationDocument * document = [Vacations getOpenManagedVacation];
+    
+    if(document) {       
         if([document photoExists:self.photoId]) {
             // we have a photo on vacation so remove it
             // 
@@ -204,8 +200,8 @@
             [document addPhoto:self.photoDictionary];
             // update visit button to show we can Unvisit this place
             [self setVisitButtonToMatchPhotoVacationPresence:document];
-        }        
-    }];
+        }   
+    }
     
 }
 

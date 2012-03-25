@@ -22,16 +22,9 @@
 // - (VacationDocument *) initWithVacationFileURL:(NSURL*) vacation;
 
 // the name of the vacation, builds the vacation URL internally
-// note does NOT create the file on disk, to do that, you need to open it at least once
-// Refactor - could use a init method that actually creates the file, but does not open it... oh well, this is just 'demo' code
-- (VacationDocument *) initWithVacationName:(NSString*) vacationName inDirectory:(NSURL*) vacationDirectoryURL;
-
-// opens vacation file specified in initializers  (unless already open)
-// success is YES if operation succeeds, else NO
-- (void) openVacation:(void(^)(BOOL success)) result;
-
-// close also forces an auto save
-- (void) closeVacation:(void(^)(BOOL success)) result;
+// creates the file if it does not exist, does not open it
+// note returned document not valid until after result callback...
+- (VacationDocument * ) initWithVacationName:(NSString*) vacationName inDirectory:(NSURL*) vacationDirectoryURL;
 
 // returns YES if photo part of this vacation
 - (BOOL) photoExists:(NSString *) photoID;

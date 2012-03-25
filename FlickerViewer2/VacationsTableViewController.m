@@ -75,7 +75,10 @@
     if([sender isKindOfClass:[UITableViewCell class]])
     {
         NSIndexPath * indexPath = self.tableView.indexPathForSelectedRow;
-        [Vacations setSelectedVacationName:[self.vacationNames objectAtIndex:indexPath.row]];
+        [Vacations openVacation:[self.vacationNames objectAtIndex:indexPath.row] done:^(BOOL success) {
+            // todo - something with result if there's an error
+            // note it's possible the sequed to controller will appear before the document loads, but the other controllers managed that case
+        }];
     }
 
 }
@@ -125,28 +128,25 @@
     // NSLog(@"received vacation request %@", vacationName);
     // close the modal view first
     [self dismissViewControllerAnimated:YES completion:nil];
-    NSString * newVacationName = vacationName; // doing this so we can access it in the following blocks
-    if(vacationName && vacationName.length > 0){
+    if(vacationName && vacationName.length > 0){ // make sure user entered something in the dialog
         if(![Vacations vacationExists:vacationName]) {
-            // new vacation needed, getVacation creates the document, persists it, and opens it
-            // Refactor - a method that just creates it on disk without opening it. 
-            [Vacations getVacation:vacationName done:^(VacationDocument *document) {
-                // it's open, but we might not need it now, so just close it
-                // 
-                [document closeVacation:^(BOOL success) {
-                    typeof (self) bSelf = self;
-                    dispatch_async(dispatch_get_main_queue(), ^{ // should be on main queue already, but just in case.. 
-                        // let's assume since the user just added it, they want to use it, so select it
-                        // this way they can go directly to looking at photos and adding them to the vacation
-                        // the other controllers will open the vacation if that's necessary
-                        [Vacations setSelectedVacationName:newVacationName]; // block access 
-                        // update table on main que to show new vacation !
-                        self.vacationNames = [Vacations getVacationNames]; // get the latest from persistent store !
-                                                
-                        [bSelf.tableView reloadData];
-                    });
-                }];
-            }];
+            // new vacation needed, create it and then open it and then update our view
+            [Vacations createVacation:vacationName done:^(VacationDocument * document) {
+                if(document) {
+                    // let's assume since the user just added it, they want to use it, so open it
+                    // this way they can go directly to looking at photos without having to select the vacation first in the vacations table view
+                    [Vacations openVacation:document.vacationName done:^(BOOL success) {
+                            if(success) {
+                                // also update table to show latest vacation name !
+                                self.vacationNames = [Vacations getVacationNames]; // update
+                                [self.tableView reloadData];
+                            }
+                        }]; // end open vacation
+                    
+                } else {
+                    // todo error on creation....
+                }
+            }]; // end create vacation
             
         } else {
             // todo alert user vacation already exists - could do this in the add vacation dialog !!

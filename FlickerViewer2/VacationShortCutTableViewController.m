@@ -35,7 +35,10 @@
     // for display purposes
     // call getSelectedVacationName each time view will appear, 
     // rather than on ViewDidLoad, because selection can change
-    [self.navigationItem setTitle:[Vacations getSelectedVacationName]];
+    VacationDocument * document = [Vacations getOpenManagedVacation];
+    if(document) {
+        [self.navigationItem setTitle:document.vacationName];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated

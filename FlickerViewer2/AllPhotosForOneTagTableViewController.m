@@ -79,10 +79,10 @@
     [super viewWillAppear:animated];
     
     // get VacationDocument managed document for this vacation and setup fetch request
-    [Vacations getVacation:[Vacations getSelectedVacationName] done:^(VacationDocument *document) {
-        self.vacationDocument = document;
+    self.vacationDocument = [Vacations getOpenManagedVacation];
+    if(self.vacationDocument) { // make sure it's open
         [self setupFetchedResultsController];
-    }];  
+    }
     
     // local display
     self.navigationItem.title = self.tagName;

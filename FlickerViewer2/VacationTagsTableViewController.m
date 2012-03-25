@@ -80,10 +80,12 @@
 
     // get VacationDocument managed document for this vacation and setup fetch request
     // do this everytime view appears, just in case selected vacation name changes
-    [Vacations getVacation:[Vacations getSelectedVacationName] done:^(VacationDocument *document) {
-        self.vacationDocument = document;
+    self.vacationDocument = [Vacations getOpenManagedVacation];
+    if(self.vacationDocument) { // make sure it's open
+
         [self setupFetchedResultsController];
-    }]; 
+    }
+
     
 }
 

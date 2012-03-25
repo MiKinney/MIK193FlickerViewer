@@ -21,29 +21,40 @@
      // Override point for customization after application launch.
     // setup up split view controllers delegatge
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-    UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
-    // get our detail view controller
-    DetailViewSelectorController * detailViewSelectorController = [splitViewController.viewControllers lastObject]; // 
-        
-    // the DetailViewSelectorController use's the split view's delegate to  control display of popover buttons in portrait / landscape mode for each detail
-    // 
-    splitViewController.delegate = (id) detailViewSelectorController;  
+        UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
+        // get our detail view controller
+        DetailViewSelectorController * detailViewSelectorController = [splitViewController.viewControllers lastObject]; // 
+            
+        // the DetailViewSelectorController use's the split view's delegate to  control display of popover buttons in portrait / landscape mode for each detail
+        // 
+        splitViewController.delegate = (id) detailViewSelectorController;  
+            
+    }
       
-    // make sure we have at least a default vacation document on disk
+    // make sure we have at least a default vacation document on disk and open
     // refactor : this is for 'demo purposes', so a user sees a 'My Vacation' the first time they run the app
     // refactor : better solution is persist the last opened vacation and only open the default if nothing yet persisted.
-    // 
-        [Vacations getVacation:@"" done:^(VacationDocument *document) { // nil generates default vacation
-            // it's open, but we don't need it now, so just close it
-            // 
-            [document closeVacation:^(BOOL success) {
-
+    //
+    NSArray * vacationNames = [Vacations getVacationNames];
+    if(vacationNames.count == 0)
+    {
+        // create the default since nothing exists
+        [Vacations createVacation:@"" done:^(VacationDocument *document) {
+            // open it so it's ready for use by default
+            if(document) {
+                [Vacations openVacation:document.vacationName done:^(BOOL success) {
+                    // hopefully it opened, not sending a message in this 'demo'
                 }];
-            }];
-                
-       
+             }
+        }];
+    } else {
+        // we already have created vacations, get the last one used and open it 
+        [Vacations openVacation:[Vacations getLastOpenedVacationName] done:^(BOOL success) {
+            // hopefully it opened, not sending a message in this 'demo'
+        }];
     }
-    
+         
+                    
     return YES;
 }
 

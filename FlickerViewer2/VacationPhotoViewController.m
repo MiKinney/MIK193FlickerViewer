@@ -51,8 +51,10 @@
 // 
 - (IBAction)visitButtonTouched:(UIBarButtonItem *)sender {
     
-    [Vacations getVacation:[Vacations getSelectedVacationName] done:^(VacationDocument *document) {
-        
+    
+    // do this everytime view appears, just in case selected vacation name changes
+    VacationDocument * document = [Vacations getOpenManagedVacation];
+    if(document) { // make sure it's open
         if([document photoExists:self.photoId]) {
             // we have a photo on vacation so remove it
             // 
@@ -68,8 +70,8 @@
             // todo - in iPhone, we should pop the view
             // note - right now, we are still showing the visit button's last state
             // since view is now gone, it's doesn't make sense to show anything
-        }      
-    }];
+        }  
+    }
     
 }
 

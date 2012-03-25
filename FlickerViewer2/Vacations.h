@@ -5,7 +5,9 @@
 //  Created by Michael Kinney on 3/15/12.
 //  Copyright (c) 2012 . All rights reserved.
 //
-// a collection of VacationDocuments
+// access to the a vacation managed document
+// may only have one document open at same time
+// also convience method to get all persisted vacations.
 
 #import <Foundation/Foundation.h>
 #import "VacationDocument.h"
@@ -21,21 +23,19 @@
 // note this call goes to persistent store each time
 + (BOOL) vacationExists:(NSString *)vacationName;
 
-// set's (and persists) vacation name 
-// note this does not open the vacation, for that use getVacation 
-// there is only one selected vacation name possible at any one time for all vacations 
-+ (void) setSelectedVacationName:(NSString *) vacationName;
-// get's set selected vacation name , returns default name if nothing yet persisted
-// there is only one selected vacation name possible at any one time for all vacations 
-+ (NSString *) getSelectedVacationName;
+// returns persisted value of last vacation user had open
+// 
++(NSString*) getLastOpenedVacationName;
 
+// creates the managed document on disk if it doesn't exist, and returns it (or the existing one) in the callback 
++ (void) createVacation:(NSString *) vacationName done:(void (^)(VacationDocument * document))result; 
 
+// opens vacationdocument (if not already open) vacation must already exist
+// also c
++ (void) openVacation:(NSString *) vacationName done:(void (^)(BOOL success))result; 
 
-// provides existing vacationDocument and  opens document if not already open
-// if necessary creates file on disk and adds the document first
-// document == nil if error creating or opening document
-// insures that only one instance of a UIManagedDocument exists and is open for any vacationName
-+ (void) getVacation:(NSString*) vacationName done:(void(^)(VacationDocument * document)) result;
+// returns presently open managed vacation, nil if nothing open yet
++ (VacationDocument * ) getOpenManagedVacation;
 
 // removes vacation from collection, does NOT close it nor remove from file system
 + (void) removeVacation:(NSString *) vacationName done:(void(^)(BOOL success)) result;

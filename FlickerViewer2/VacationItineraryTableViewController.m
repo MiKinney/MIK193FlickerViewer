@@ -81,10 +81,11 @@
     // get VacationDocument managed document for this vacation and setup fetch request
     // do this everytime view appears, just in case selected vacation name changes
     // 
-    [Vacations getVacation:[Vacations getSelectedVacationName] done:^(VacationDocument *document) {
-        self.vacationDocument = document;
+    self.vacationDocument = [Vacations getOpenManagedVacation];
+    if(self.vacationDocument) {
         [self setupFetchedResultsController];
-    }];
+    }
+    
    
     [self.navigationItem setTitle:@"Itinerary"];   
 }
