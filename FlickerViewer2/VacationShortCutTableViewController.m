@@ -71,7 +71,7 @@
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndentifier];
         }
         cell.textLabel.text = @"Itinerary";
-        cell.textLabel.textColor = [UIColor whiteColor];
+        cell.textLabel.textColor = [UIColor whiteColor]; // whiteColor is close to the mercury colors I'm using in storyboard for text
         
     } else if(indexPath.row == TAGS_ROW) {
         
@@ -81,7 +81,8 @@
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndentifier];
         }
         cell.textLabel.text = @"Tags";
-        cell.textLabel.textColor = [UIColor whiteColor];
+        cell.textLabel.textColor = [UIColor whiteColor]; // whiteColor is close to the mercury colors I'm using in storyboard for text
+
         
     } else {
         NSLog(@"Error: %@ called with unsupported row %d", NSStringFromSelector(_cmd), indexPath.row);
@@ -90,9 +91,11 @@
     // default accessory is black, which is invisible when I use blackbackground for cell
     // this control is a custom accessory that use's same color as text label text 
     //  
-    DTCustomColoredAccessory *accessory = [DTCustomColoredAccessory accessoryWithColor:cell.textLabel.textColor];
-    accessory.highlightedColor = cell.textLabel.highlightedTextColor; 
-    cell.accessoryView =accessory;
+    if(cell) {
+        DTCustomColoredAccessory *accessory = [DTCustomColoredAccessory accessoryWithColor:cell.textLabel.textColor];
+        accessory.highlightedColor = cell.textLabel.highlightedTextColor; 
+        cell.accessoryView =accessory;
+    }
 
     return cell;
 }

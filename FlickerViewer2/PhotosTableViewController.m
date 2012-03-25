@@ -224,30 +224,14 @@
     
     // Uncomment the following line to preserve selection between presentations.
     // this will not work because we reload the table everytime view appears
-    // self.clearsSelectionOnViewWillAppear = NO;
+    self.clearsSelectionOnViewWillAppear = NO;
     
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-}
-
-- (void)viewDidUnload
-{
-    
-    self.placePhotos = nil;
-    self.selectedPhoto = nil;
-    
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-    
-     [super viewDidUnload];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    // refactor - is the best place ? 
+    // ok to call this on viewDidLoad rather than viewWillAppear, because the self.dataSourceDelegate.place value will not change unless we seque back to the
+    // top rated places list. And by only loading photos in viewDidLoad we of course improve performance, 
+    // but also loading photos here allows the clearsSelectionOnViewWillAppear = NO to work when we tab between photos and recents and vacations
     // for the given photosPlace,  get array of dictionaries of top x number photo descriptions and id's, and refresh table view to show 
+    
+    __block NSArray * unsortedPlacePhotos;
     
     __block typeof (self) bSelf = self; // avoid memory retain cycle
     
@@ -264,8 +248,24 @@
     dispatch_async(downloadQueue, ^{
         
         
-        // get top photos for this photoPlace from flicker
-        bSelf.placePhotos = [FlickrFetcher photosInPlace:photoPlace maxResults:MAX_PLACE_PHOTOS];
+        // the results are returned in order of most tagged...     
+        // bSelf.placePhotos = [FlickrFetcher photosInPlace:photoPlace maxResults:MAX_PLACE_PHOTOS];
+        
+        // but I'd rather see them in alphabetical order  - get top photos for this photoPlace from flicker
+        unsortedPlacePhotos = [FlickrFetcher photosInPlace:photoPlace maxResults:MAX_PLACE_PHOTOS];
+        
+        // sort 
+        bSelf.placePhotos = [unsortedPlacePhotos sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            NSDictionary * place1 = (NSDictionary *) obj1;
+            NSString * photo1Title = [place1 valueForKey:FLICKR_PHOTO_TITLE];
+            if(!photo1Title) {photo1Title = [[NSString alloc] initWithString:@"photo1Title"];} // no nil strings to comparator
+            
+            NSDictionary * place2 = (NSDictionary *) obj2;
+            NSString * photo2Title = [place2 valueForKey:FLICKR_PHOTO_TITLE];
+            if(!photo2Title) {photo2Title = [[NSString alloc] initWithString:@"photo2Title"];} // no nil strings to comparator
+            
+            return ([photo1Title compare:photo2Title options:NSCaseInsensitiveSearch]);
+        }];
         
         // now that we have the photos list, force view update and update title
         dispatch_async(dispatch_get_main_queue(),^{
@@ -289,7 +289,27 @@
         
     });
     
-    dispatch_release(downloadQueue);    
+    dispatch_release(downloadQueue);
+}
+
+- (void)viewDidUnload
+{
+    
+    self.placePhotos = nil;
+    self.selectedPhoto = nil;
+    
+    // Release any retained subviews of the main view.
+    // e.g. self.myOutlet = nil;
+    
+     [super viewDidUnload];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    
+     
     
 }
 

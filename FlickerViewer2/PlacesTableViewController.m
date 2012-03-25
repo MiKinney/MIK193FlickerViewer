@@ -32,6 +32,8 @@
 // 
 - (void) refreshTopPlaces{
     
+    __block NSArray * unsortedPlaces;
+    
     __block typeof (self) bSelf = self; //  avoid memory leaks through retain cycle, see  // http://stackoverflow.com/questions/4352561/retain-cycle-on-self-with-blocks
     
     MIKActivityIndicatorView* spinner = [[MIKActivityIndicatorView alloc] initWithView:self.tableView];
@@ -41,7 +43,23 @@
     dispatch_queue_t downloadQueue = dispatch_queue_create("Flicker Fetch", NULL);
     dispatch_async(downloadQueue, ^{
         // do the download
-        bSelf.topPlaces = [FlickrFetcher topPlaces];
+        
+        unsortedPlaces = [FlickrFetcher topPlaces];
+        // the results are returned in order of most tagged... but I'd rather see them in alphabetical order
+        // 
+        bSelf.topPlaces = [unsortedPlaces sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            NSDictionary * place1 = (NSDictionary *) obj1;
+            NSString * place1Name = [place1 valueForKey:FLICKR_PLACE_NAME];
+            if(!place1Name) {place1Name = [[NSString alloc] initWithString:@"place1Name"];}// no nil strings to comparator
+            
+            NSDictionary * place2 = (NSDictionary *) obj2;
+            NSString * place2Name = [place2 valueForKey:FLICKR_PLACE_NAME];
+            if(!place2Name) {place2Name = [[NSString alloc] initWithString:@"place2Name"];} // no nil strings to comparator
+            
+            return ([place1Name compare:place2Name options:NSCaseInsensitiveSearch]);
+        }];
+        
+       // bSelf.topPlaces = [FlickrFetcher topPlaces];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             // update table on main que

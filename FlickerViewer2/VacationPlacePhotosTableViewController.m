@@ -67,7 +67,7 @@
 {
     [super viewWillAppear:animated];
     
-    // do this here rather than viewDidLoad, becuase getSelectedVacationName could change between appearances
+    // do this here rather than viewDidLoad, becuase we want the photos in this vacation place to auto update, while it's in view,  as user visits / unvisits vacations
     self.vacationDocument = [Vacations getOpenManagedVacation];
     if(self.vacationDocument) {
         [self setupFetchedResultsController];
