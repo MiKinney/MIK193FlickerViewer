@@ -15,9 +15,4 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
-// returns valid object when on iPad, otherwise nil
-// table controllers for photos, recents, vacations,  use this to access the 
-// the corresponding detail view controller contained in the DetailViewSelectorController
-- (DetailViewSelectorController *) detailViewSelectorController;
-
 @end

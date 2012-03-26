@@ -5,8 +5,7 @@
 //  Created by Michael Kinney on 3/13/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
-
-#import "MIKAppDelegate.h"
+#import "DetailViewSelectorController.h"
 #import "VacationPlacePhotosTableViewController.h"
 #import "Vacations.h"
 #import "VacationPhotoViewController.h"
@@ -137,8 +136,8 @@
 {
     
     Photo *photo = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    
-    DetailViewSelectorController * detailViewSelectorController = [(MIKAppDelegate *) [[UIApplication sharedApplication] delegate] detailViewSelectorController];
+	
+	DetailViewSelectorController *  detailViewSelectorController = [self.splitViewController.viewControllers lastObject];
     
     if (detailViewSelectorController){ // we're on an ipad,
         //  write the detail property directly, because, rather than making detail use it's PhotoViewControllerDelegate photo

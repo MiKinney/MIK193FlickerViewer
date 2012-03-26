@@ -5,13 +5,13 @@
 //  Created by Michael Kinney on 3/16/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
-#import "MIKAppDelegate.h"
-#import "DetailViewSelectorController.h"
-#import "VacationPhotoViewController.h"
-#import "AllPhotosForOneTagTableViewController.h"
-#import "Tag.h"
-#import "Vacations.h"
 #import "DTCustomColoredAccessory.h"
+#import "DetailViewSelectorController.h"
+#import "Tag.h"
+#import "AllPhotosForOneTagTableViewController.h"
+#import "VacationPhotoViewController.h"
+#import "Vacations.h"
+
 
 @interface AllPhotosForOneTagTableViewController()
 
@@ -67,7 +67,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
 }
 
 - (void)viewDidUnload
@@ -166,8 +165,6 @@
     accessory.highlightedColor = cell.textLabel.highlightedTextColor; 
     cell.accessoryView =accessory;
     
-
-    
    // hack - using my own locally created collection of photos 
    Photo *photo = [self.taggedPhotos objectAtIndex:[indexPath row]];
     
@@ -187,8 +184,8 @@
     // hack - using my own locally created collection of photos 
 
     Photo *photo = [self.taggedPhotos objectAtIndex:[indexPath row]];
-    
-    DetailViewSelectorController * detailViewSelectorController = [(MIKAppDelegate *) [[UIApplication sharedApplication] delegate] detailViewSelectorController];
+	
+	DetailViewSelectorController *  detailViewSelectorController = [self.splitViewController.viewControllers lastObject];
     
     if (detailViewSelectorController){ // we're on an ipad,
         VacationPhotoViewController *pvc = [detailViewSelectorController vacationPhotoViewController];

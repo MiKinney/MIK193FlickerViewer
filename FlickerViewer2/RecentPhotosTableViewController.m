@@ -6,7 +6,6 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "MIKAppDelegate.h"
 #import "DetailViewSelectorController.h"
 #import "RecentPhotosTableViewController.h"
 #import "FlickrFetcher.h"
@@ -96,8 +95,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     self.selectedPhoto = [self.placePhotos objectAtIndex:indexPath.row]; // save user's selection
-    
-    DetailViewSelectorController * detailViewSelectorController = [(MIKAppDelegate *) [[UIApplication sharedApplication] delegate] detailViewSelectorController];
+
+	
+	DetailViewSelectorController *  detailViewSelectorController = [self.splitViewController.viewControllers lastObject];
     
     if (detailViewSelectorController){ // we're on an ipad,
         // getting the same class type, but specific instance for the Recent photos

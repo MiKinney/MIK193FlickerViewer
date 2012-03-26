@@ -20,7 +20,7 @@
 		1F20E10A14EF0A1000144B99 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1F20E10814EF0A1000144B99 /* InfoPlist.strings */; };
 		1F20E10C14EF0A1000144B99 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F20E10B14EF0A1000144B99 /* main.m */; };
 		1F20E11014EF0A1000144B99 /* MIKAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F20E10F14EF0A1000144B99 /* MIKAppDelegate.m */; };
-		1F20E11314EF0A1000144B99 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1F20E11114EF0A1000144B99 /* MainStoryboard.storyboard */; };
+		1F20E11314EF0A1000144B99 /* iPhoneStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1F20E11114EF0A1000144B99 /* iPhoneStoryboard.storyboard */; };
 		1F20E11E14EF0C3A00144B99 /* PlacesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F20E11D14EF0C3A00144B99 /* PlacesTableViewController.m */; };
 		1F2E3623151AB2D100628FDB /* AddVacationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E3621151AB2D100628FDB /* AddVacationViewController.m */; };
 		1F2E3624151AB2D100628FDB /* AddVacationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F2E3622151AB2D100628FDB /* AddVacationViewController.xib */; };
@@ -69,13 +69,13 @@
 		1F20E0FF14EF0A1000144B99 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		1F20E10114EF0A1000144B99 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1F20E10314EF0A1000144B99 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		1F20E10714EF0A1000144B99 /* FlickerViewer-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FlickerViewer-Info.plist"; sourceTree = "<group>"; };
+		1F20E10714EF0A1000144B99 /* FlickerViewer-Info.plist */ = {isa = PBXFileReference; path = "FlickerViewer-Info.plist"; sourceTree = "<group>"; };
 		1F20E10914EF0A1000144B99 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1F20E10B14EF0A1000144B99 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		1F20E10D14EF0A1000144B99 /* FlickerViewer-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FlickerViewer-Prefix.pch"; sourceTree = "<group>"; };
+		1F20E10D14EF0A1000144B99 /* FlickerViewer-Prefix.pch */ = {isa = PBXFileReference; path = "FlickerViewer-Prefix.pch"; sourceTree = "<group>"; };
 		1F20E10E14EF0A1000144B99 /* MIKAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MIKAppDelegate.h; sourceTree = "<group>"; };
 		1F20E10F14EF0A1000144B99 /* MIKAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MIKAppDelegate.m; sourceTree = "<group>"; };
-		1F20E11214EF0A1000144B99 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
+		1F20E11214EF0A1000144B99 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/iPhoneStoryboard.storyboard; sourceTree = "<group>"; };
 		1F20E11C14EF0C3A00144B99 /* PlacesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlacesTableViewController.h; path = FlickerViewer2/PlacesTableViewController.h; sourceTree = "<group>"; };
 		1F20E11D14EF0C3A00144B99 /* PlacesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlacesTableViewController.m; path = FlickerViewer2/PlacesTableViewController.m; sourceTree = "<group>"; };
 		1F20E12214EF114400144B99 /* FlickrAPIKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FlickrAPIKey.h; path = FlickerViewer2/FlickrAPIKey.h; sourceTree = "<group>"; };
@@ -182,21 +182,21 @@
 			children = (
 				1F921FBC151F7EFE00D8A734 /* DTCustomColoredAccessory.h */,
 				1F921FBD151F7EFE00D8A734 /* DTCustomColoredAccessory.m */,
+				1F90606A15017D1300DD91D2 /* MapViewController.h */,
+				1F90606B15017D1300DD91D2 /* MapViewController.m */,
+				1F11B09414FC20E700118D5D /* MIKActivityIndicatorView.h */,
+				1F11B09514FC20E700118D5D /* MIKActivityIndicatorView.m */,
 				1F20E10E14EF0A1000144B99 /* MIKAppDelegate.h */,
 				1F20E10F14EF0A1000144B99 /* MIKAppDelegate.m */,
 				1FB0D3091518430C00703037 /* DetailViewSelectorController.h */,
 				1FB0D30A1518430C00703037 /* DetailViewSelectorController.m */,
 				1F11B07C14F8134300118D5D /* iPadStoryboard.storyboard */,
-				1F20E11114EF0A1000144B99 /* MainStoryboard.storyboard */,
+				1F20E11114EF0A1000144B99 /* iPhoneStoryboard.storyboard */,
 				1F640F0A150EB76C002EF7B2 /* Core Data */,
 				1FDA2A0C15092E22000BC94C /* Flicker Fetcher */,
-				1FE66B46150EA5F400C4EF86 /* Photo Classes */,
-				1FE66B45150EA5BB00C4EF86 /* Places */,
-				1FE66B47150EA66000C4EF86 /* Vacations */,
-				1F11B09414FC20E700118D5D /* MIKActivityIndicatorView.h */,
-				1F11B09514FC20E700118D5D /* MIKActivityIndicatorView.m */,
-				1F90606A15017D1300DD91D2 /* MapViewController.h */,
-				1F90606B15017D1300DD91D2 /* MapViewController.m */,
+				1FE66B46150EA5F400C4EF86 /* Photo */,
+				1FE66B45150EA5BB00C4EF86 /* Place */,
+				1FE66B47150EA66000C4EF86 /* Vacation */,
 				1F20E10614EF0A1000144B99 /* Supporting Files */,
 			);
 			name = FlickerViewer;
@@ -252,7 +252,7 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
-		1FE66B45150EA5BB00C4EF86 /* Places */ = {
+		1FE66B45150EA5BB00C4EF86 /* Place */ = {
 			isa = PBXGroup;
 			children = (
 				1F6FF6C21502A163008B5297 /* PlacesMapAnnotation.h */,
@@ -260,11 +260,11 @@
 				1F20E11C14EF0C3A00144B99 /* PlacesTableViewController.h */,
 				1F20E11D14EF0C3A00144B99 /* PlacesTableViewController.m */,
 			);
-			name = Places;
+			name = Place;
 			path = ..;
 			sourceTree = "<group>";
 		};
-		1FE66B46150EA5F400C4EF86 /* Photo Classes */ = {
+		1FE66B46150EA5F400C4EF86 /* Photo */ = {
 			isa = PBXGroup;
 			children = (
 				1F44250E1508329A0083E649 /* PhotosCacheController.h */,
@@ -278,10 +278,10 @@
 				1F11B0A314FDABA200118D5D /* RecentPhotosTableViewController.h */,
 				1F11B0A414FDABA200118D5D /* RecentPhotosTableViewController.m */,
 			);
-			name = "Photo Classes";
+			name = Photo;
 			sourceTree = "<group>";
 		};
-		1FE66B47150EA66000C4EF86 /* Vacations */ = {
+		1FE66B47150EA66000C4EF86 /* Vacation */ = {
 			isa = PBXGroup;
 			children = (
 				1F2E3620151AB2D100628FDB /* AddVacationViewController.h */,
@@ -302,7 +302,7 @@
 				1FE9BCA0151404C800E934D1 /* VacationTagsTableViewController.h */,
 				1FE9BCA1151404C800E934D1 /* VacationTagsTableViewController.m */,
 			);
-			name = Vacations;
+			name = Vacation;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -356,7 +356,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1F20E10A14EF0A1000144B99 /* InfoPlist.strings in Resources */,
-				1F20E11314EF0A1000144B99 /* MainStoryboard.storyboard in Resources */,
+				1F20E11314EF0A1000144B99 /* iPhoneStoryboard.storyboard in Resources */,
 				1F11B07D14F8134300118D5D /* iPadStoryboard.storyboard in Resources */,
 				1F2E3624151AB2D100628FDB /* AddVacationViewController.xib in Resources */,
 			);
@@ -415,12 +415,12 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		1F20E11114EF0A1000144B99 /* MainStoryboard.storyboard */ = {
+		1F20E11114EF0A1000144B99 /* iPhoneStoryboard.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				1F20E11214EF0A1000144B99 /* en */,
 			);
-			name = MainStoryboard.storyboard;
+			name = iPhoneStoryboard.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

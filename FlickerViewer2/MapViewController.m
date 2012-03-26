@@ -6,7 +6,6 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "MIKAppDelegate.h"
 #import "DetailViewSelectorController.h"
 #import "MapViewController.h"
 #import "PhotoViewController.h"
@@ -21,7 +20,6 @@
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (strong, nonatomic) MKAnnotationView * selectedAnnotationView;
-@property (weak, nonatomic) MIKAppDelegate * appDelegate;
 
 
 @end
@@ -31,8 +29,6 @@
 @synthesize annotations = _annotations;
 @synthesize delegate = _delegate;
 @synthesize selectedAnnotationView = _selectedAnnotationView;
-@synthesize appDelegate = _appDelegate;
-
 
 
 // remove any existing annotations and add new ones
@@ -133,8 +129,8 @@
 {
 
     self.selectedAnnotationView = view; // save for later use by delegate callbacks for selected place and photos
-    
-    DetailViewSelectorController * detailViewSelectorController = [(MIKAppDelegate *) [[UIApplication sharedApplication] delegate] detailViewSelectorController];
+	
+	DetailViewSelectorController *  detailViewSelectorController = [self.splitViewController.viewControllers lastObject];
     
     if (detailViewSelectorController){ // we're on an ipad, 
         PhotoViewController * photoViewController = [detailViewSelectorController photoViewController]; 

@@ -5,7 +5,7 @@
 //  Created by Michael Kinney on 2/21/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
-#import "MIKAppDelegate.h"
+
 #import "DetailViewSelectorController.h"
 
 #import "PhotosTableViewController.h"
@@ -173,7 +173,7 @@
 {
     self.selectedPhoto = [self.placePhotos objectAtIndex:indexPath.row]; // save user's selection
 
-    DetailViewSelectorController * detailViewSelectorController = [(MIKAppDelegate *) [[UIApplication sharedApplication] delegate] detailViewSelectorController];
+	DetailViewSelectorController *  detailViewSelectorController = [self.splitViewController.viewControllers lastObject];
     
     if (detailViewSelectorController){ // we're on an ipad,
         PhotoViewController *pvc = [detailViewSelectorController photoViewController];

@@ -58,19 +58,7 @@
     return YES;
 }
 
-- (DetailViewSelectorController *) detailViewSelectorController 
-{
-    DetailViewSelectorController * detailViewSelectorController = nil;
-    
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) { // only iPads have detail view controllers
-        
-        UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
-        detailViewSelectorController = [splitViewController.viewControllers lastObject]; // the details view controllers nav object
-    }  
-    return detailViewSelectorController;
-}
-
-							
+					
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     /*
