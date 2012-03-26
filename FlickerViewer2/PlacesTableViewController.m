@@ -46,7 +46,7 @@
         
         unsortedPlaces = [FlickrFetcher topPlaces];
         // the results are returned in order of most tagged... but I'd rather see them in alphabetical order
-        // 
+        // Refactor - a switch to let user choose between sorted / unsorted
         bSelf.topPlaces = [unsortedPlaces sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
             NSDictionary * place1 = (NSDictionary *) obj1;
             NSString * place1Name = [place1 valueForKey:FLICKR_PLACE_NAME];
