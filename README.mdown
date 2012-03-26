@@ -4,4 +4,175 @@ FlickerViewer
 FlickerViewer is based on homework assignments from Stanford's CS193P iPhone / iPad Development Class
 
 
+Building 
+=======
+
+The iOS is 5.1.  You will need XCode 4.3.2 or later and OS X Lion 10.7.3 or later to build and run on a device. 
+
+Of the fifty plus source files, Standord supplied five files and two I acquired from a third party. This is noted in the headers.
+
+Running :
+=========
+
+You will need your own flicker api key.  Enter it in the FlickrAPIKey.h file. I may add the ability to sign-in to flicker from this app, 
+however that was not part of the original assignments.
+
+
+The Assignments : 
+=================
+
+(extracted directly from Stanford's public documentation)
+
+Assignment IV  - Top Places 
+
+Objective :
+
+In this series of assignments, you will create an application that presents a list of popular Flickr photo spots. This first assignment is to create a navigation-based 
+application to let users browse the most popular places on Flickr, click on any they are interested in to see some photos taken in that place.
+
+The primary work to be done in this assignment is to create build a tab-based user- interface with two tabs: Top Places and Recents. 
+The first two will show the names of places and the second a list of the most recently-viewed photos.
+
+The goals are to get familiar with table views, tab bar controller, scroll views, image views and to get experience building yet more MVCs in your application.
+All the data you need will be downloaded from Flickr.com using Flickr’s API. Code will be provided for the Flickr queries you need for this assignment.
+
+Required Tasks :
+
+1. Use the provided FlickrFetcher class method topPlaces to get an array of the most popular Flickr photo spots in the last day or so. 
+It is an array of NSDictionarys which contain information about each place.
+
+2. Create a UITabBarController-based user-interface with two tabs. The first shows a UITableView with the list of places 
+(in alphabetical order) obtained in Required Task #1. The second shows a UITableView with a list of the 20 most recently viewed photos.
+
+3. Anywhere a place appears in a table view in your application, the most detailed part of the location (e.g. the city name) should be 
+the title of the table view’s cell and the rest of the name of the location (e.g. state, province, country, etc.) should appear as the subtitle of the table view cell.
+
+4. When the user chooses a place from the list obtained in Required Task #1, you must query Flickr again to get an array of 50 recent photos 
+from that place and display them in a list. Do this using the FlickrFetcher method photosInPlace:maxResults: (it returns an array of dictionaries, each of which contains info about a photo).
+
+5. Any list of photos should display the photo’s title as the table view cell’s title and its description as the table view cell’s subtitle. 
+If the photo has no title, use its description as the title. If it has no title or description, use “Unknown” as the title.
+
+6. When the user chooses a photo from any list, display its image inside a scrolling view that allows the user to pan and zoom (a reasonable amount). 
+You obtain the URL for a Flickr photo’s image using FlickrFetcher’s urlForPhoto:format: (use Large).
+
+7. Make sure the photo’s title is somewhere on screen whenever you are showing the photo image to the user.
+
+8. Whenever a photo’s image appears on screen, it should initially be zoomed to show as much of the photo as possible with no extra, unused space. 
+It is not necessary to continue to do this as the user rotates the device or zooms in and out on the photo by pinching.
+
+9. Your application must work in both portrait and landscape orientations on the iPhone. Support for the iPad is optional 
+(though it will be required next week, so you can save time later by implementing it now). Use appropriate platform-specific UI idioms 
+(e.g., you must use UINavigationControllers to present the information on the iPhone).
+
+10. The recents tab must show the list of most recently view photos in chronological order of viewing with the most recent at the top,
+ and no duplicates in the list. It is sufficient to only update the list each time it (re)appears on screen (i.e. in viewWillAppear:). 
+ A photo can be uniquely identified by its “id” entry in its dictionary.
+ 
+11. The list of recents photos should be saved in NSUserDefaults. The arrays you get back from the FlickrFetcher methods are all property lists.
+
+
+Assignment V - First Map Places
+
+Objective :
+
+In this assignment, you will continue working on your application that lets users browse Flickr photos. 
+
+Now you’ll fix problems with the responsiveness of your user-interface by using GCD to move blocking activity out of the main thread and by cacheing the image data you receive from Flickr.
+In addition, you’ll add some maps to your app and make it Universal.
+
+If you have already done some of these things, you might be ahead of the game for this week. But, as always, make sure you meet the Required Tasks of this assignment.
+
+Required Tasks :
+
+1. Your application must implement all the required tasks from the last assignment (and all the required tasks in this assignment) without doing any Flickr fetching or file system interactions in the main thread. 
+Your user-interface should be responsive to the user at all times (i.e. the main thread should never be blocked).
+
+2. If the user is waiting for something (other than a thumbnail) to update in a view, display a UIActivityIndicatorView (spinning wheel) somewhere appropriate 
+until it fills in (the network activity indicator in the little status bar at the very top of the screen is not an acceptable substitute for this). 
+The user interface should be completely responsive while a wheel is spinning (e.g. the user could hit the back button or a tab and navigate away from the spinning wheel if so desired). 
+Also, the user- interface should never “navigate” except directly in response to a user action.
+
+3. Cache photo images viewed by the user into files in your application’s sandbox. Each photo’s image should be a separate file in the sandbox. 
+Limit the cache to about 10MB total. When this limit is reached, the oldest photos in the cache should be evicted (deleted) to make room for new photos coming in. 
+Your application should never query Flickr for the image data for a photo that it has in its cache (obviously). This cache should persist between application launches.
+
+4. Keep as little of the photos’ image data in memory (i.e. RAM) as you can (i.e. don’t keep strong pointers to NSData and/or UIImage objects for photos that are not on- screen). 
+You should have at most 2 photos’ image data in memory at a given time, preferably only 1 (or even 0 if none are being viewed).
+
+
+5. Anywhere in your application where a list of photos or places appears, give the user an option (via some UI of your choice) to view information in the list on a map instead. 
+Each annotation on the map should have a callout which displays the following:
+
+a. The title of the photo or the name of the place.
+
+b. In the case of a photo, its description (at least the first few words of it, if any) and a thumbnail image (FlickrFetcherPhotoFormatSquare) of the photo.
+It is okay if the callout shows up initially without the thumbnail, but as soon as you are able to retrieve it from Flickr (assuming the callout is still 
+on screen at that point), the thumbnail should appear. Beware Required Task #1.
+ 
+c. A disclosure button which brings up the full image of the chosen photo (exactly as if the user had chosen the photo from a table) or which brings up a list of photos in that place 
+(again, exactly as if the user had chosen that place from a table).
+
+6. When a map view of photos appears on screen, its region should be set to the minimum size that fits all of its annotations (with an aesthetically-pleasing padding around them).
+
+7. Your application must support both iPhone and iPad user-interfaces. Use device- appropriate idioms.
+
+8. Your must get your application working on a device this week. Obviously we are not going to be able to check this, 
+so it is on you (and the honor code) to check yourself on this required task.
+
+
+Assignment VI - Virtual Vacation 
+
+Objective :
+
+In this series of assignments, you have been creating an application that lets you browse photos posted on Flickr. 
+
+In this final installment, you will use what you have built so far to allow your user to build a “virtual vacation” by visiting photos from around the world.
+
+The primary work to be done in this assignment is to use CoreData to build a database of photos organized by vacation which the user can peruse and search.
+
+Required Tasks: 
+
+This application lets the user assemble a Virtual Vacation of places in the world to visit. Users will use the photo-choosing capabilities of your Fast Map Places 
+application to choose photos in the places they want to go. In this application you will have two major tasks: allowing the user to choose where they want to go 
+and allowing the user to "go on vacation" in their Virtual Vacation spots. You will accomplish the former by adding a "Visit/Unvisit" button to the scenes in your Fast Map Places 
+where a photo is displayed. You will accomplish the latter by adding a new tab to your Tab Bar Controller which lets the user peruse their Virtual Vacation either by place or 
+by searching for tags that were found in the Flickr dictionaries for the photos they chose to visit.
+
+1. Add a new tab to your application that displays a new table view controller showing a list of all the "Virtual Vacations" found in the user's Documents directory in their sandbox. 
+A Virtual Vacation file is created by saving a UIManagedDocument (more on this below). Each vacation must have it’s own separate file in the Documents directory.
+
+2. When the user chooses a Virtual Vacation from the list, bring up a static table view with two choices: Itinerary and Tag Search.
+
+3. The Itinerary tab must show a list of all the places where photos in the chosen Virtual Vacation have been taken (sorted with first-visited first). 
+Clicking on a place will show all the photos in the Virtual Vacation taken in that place. The place name should be the one returned by getting the new FLICKR_PHOTO_PLACE_NAME key 
+in the Flickr photo dictionaries you retrieve from the photosInPlace:maxResults: method. You will need to use the new FlickrFetcher code available with this assignment. 
+Use only the place’s name (as returned the the FLICKR_PHOTO_PLACE_NAME key) to determine what the place is (i.e. ignore things like the Flickr place id).
+
+4. The Tag Search tab must bring up a list of all the tags found in all the photos that the user has chosen to be a part of this Virtual Vacation (sorted with most-often-seen first). 
+Touching on a tag brings up a list of all the photos in the Virtual Vacation that have that tag. The tags in a Flickr photo dictionary are contained in a single, space- separated, 
+all lowercase string (accessible via the FLICKR_TAGS key). Separate out and capitalize each tag (not all caps, just capitalize the first letter) so that they look nicer in the UI.
+ Don't include any tags that have a colon in them.
+ 
+5. You are not required to provide any UI for users to create new Virtual Vacations (see Extra Credit #1 if you want to), so simply create a single Virtual Vacation called "My Vacation" 
+in the user's Documents directory somewhere in your code. All "visits" and "unvisits" will happen in this "My Vacation" Virtual Vacation. 
+However, just because you do not have to provide UI to create new vacations does not mean you are exempted from any other required tasks which support multiple Virtual Vacations (like Required Task #1). 
+You may well want to create some other Virtual Vacations anyway just to verify that the rest of your code deals properly with multiple of them.
+
+6. All of the new tables in this application that show places or photos or tags must be driven by Core Data. It is your responsibility to determine the schema which best supports your needs.
+
+7. To make all this work, of course, you will need to add a Visit/Unvisit button to the scenes in the storyboard which show a photo. If that photo is already in "My Vacation," 
+then the button’s title should appear as "Unvisit," otherwise it should appear as "Visit." Clicking this button toggles whether the photo is part of "My Vacation" or not.
+
+8. You do not have to get this working on both platforms. Pick whichever of the two you want. It does, however, have to work on a real device, so pick the device you have the hardware for.
+
+
+
+
+
+
+
+
+
+
 

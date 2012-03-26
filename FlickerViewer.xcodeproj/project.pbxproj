@@ -49,7 +49,6 @@
 		1FB0D30F1518442900703037 /* VacationPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FB0D30E1518442900703037 /* VacationPhotoViewController.m */; };
 		1FC14590150E4F7A00D9263D /* VacationShortCutTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FC1458F150E4F7A00D9263D /* VacationShortCutTableViewController.m */; };
 		1FC915C3152123A2006DF2EA /* README.mdown in Resources */ = {isa = PBXBuildFile; fileRef = 1FC915C2152123A2006DF2EA /* README.mdown */; };
-		1FC915C6152124D9006DF2EA /* FlickrAPIKeyDuplicate in Resources */ = {isa = PBXBuildFile; fileRef = 1FC915C5152124D9006DF2EA /* FlickrAPIKeyDuplicate */; };
 		1FE9BCA2151404C800E934D1 /* VacationTagsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FE9BCA1151404C800E934D1 /* VacationTagsTableViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -128,8 +127,7 @@
 		1FB0D30E1518442900703037 /* VacationPhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VacationPhotoViewController.m; sourceTree = "<group>"; };
 		1FC1458E150E4F7A00D9263D /* VacationShortCutTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VacationShortCutTableViewController.h; sourceTree = "<group>"; };
 		1FC1458F150E4F7A00D9263D /* VacationShortCutTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VacationShortCutTableViewController.m; sourceTree = "<group>"; };
-		1FC915C2152123A2006DF2EA /* README.mdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.mdown; sourceTree = "<group>"; };
-		1FC915C5152124D9006DF2EA /* FlickrAPIKeyDuplicate */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = FlickrAPIKeyDuplicate; path = FlickerViewer2/FlickrAPIKeyDuplicate; sourceTree = "<group>"; };
+		1FC915C2152123A2006DF2EA /* README.mdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.mdown; path = ../README.mdown; sourceTree = "<group>"; };
 		1FE9BCA0151404C800E934D1 /* VacationTagsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VacationTagsTableViewController.h; sourceTree = "<group>"; };
 		1FE9BCA1151404C800E934D1 /* VacationTagsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VacationTagsTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -154,7 +152,6 @@
 		1F20E0F014EF0A1000144B99 = {
 			isa = PBXGroup;
 			children = (
-				1FC915C2152123A2006DF2EA /* README.mdown */,
 				1F640F38150EC632002EF7B2 /* CoreData.framework */,
 				1F20E10514EF0A1000144B99 /* FlickerViewer */,
 				1F20E0FE14EF0A1000144B99 /* Frameworks */,
@@ -185,6 +182,7 @@
 		1F20E10514EF0A1000144B99 /* FlickerViewer */ = {
 			isa = PBXGroup;
 			children = (
+				1FC915C2152123A2006DF2EA /* README.mdown */,
 				1F921FBC151F7EFE00D8A734 /* DTCustomColoredAccessory.h */,
 				1F921FBD151F7EFE00D8A734 /* DTCustomColoredAccessory.m */,
 				1F90606A15017D1300DD91D2 /* MapViewController.h */,
@@ -252,7 +250,6 @@
 				1F6E4F02151BE8F500ECE6FE /* FlickrFetcher.h */,
 				1F6E4F03151BE8F500ECE6FE /* FlickrFetcher.m */,
 				1F20E12214EF114400144B99 /* FlickrAPIKey.h */,
-				1FC915C5152124D9006DF2EA /* FlickrAPIKeyDuplicate */,
 			);
 			name = "Flicker Fetcher";
 			path = ..;
@@ -366,7 +363,6 @@
 				1F11B07D14F8134300118D5D /* iPadStoryboard.storyboard in Resources */,
 				1F2E3624151AB2D100628FDB /* AddVacationViewController.xib in Resources */,
 				1FC915C3152123A2006DF2EA /* README.mdown in Resources */,
-				1FC915C6152124D9006DF2EA /* FlickrAPIKeyDuplicate in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
