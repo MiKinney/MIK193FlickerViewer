@@ -1,0 +1,7 @@
+FlickerViewer
+=============
+
+FlickerViewer is based on homework assignments from Stanford's CS193P iPhone / iPad Development Class
+
+
+
