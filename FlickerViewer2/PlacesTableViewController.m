@@ -32,7 +32,7 @@
 // 
 - (void) refreshTopPlaces{
     
-    __block NSArray * unsortedPlaces;
+  //  __block NSArray * unsortedPlaces;
     
     __block typeof (self) bSelf = self; //  avoid memory leaks through retain cycle, see  // http://stackoverflow.com/questions/4352561/retain-cycle-on-self-with-blocks
     
@@ -44,9 +44,15 @@
     dispatch_async(downloadQueue, ^{
         // do the download
         
-        unsortedPlaces = [FlickrFetcher topPlaces];
-        // the results are returned in order of most tagged... but I'd rather see them in alphabetical order
+         bSelf.topPlaces = [FlickrFetcher topPlaces];
+		
+        // the results are returned in order of most tagged...this shows them in alphabetical order
+		// after using the app this way, I realized the results when alphabetical, are really shown as 'top-rated' anymore
+		// and thus look the same, when alphabetized, all the time
         // Refactor - a switch to let user choose between sorted / unsorted
+		/*
+		 unsortedPlaces = [FlickrFetcher topPlaces];
+
         bSelf.topPlaces = [unsortedPlaces sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
             NSDictionary * place1 = (NSDictionary *) obj1;
             NSString * place1Name = [place1 valueForKey:FLICKR_PLACE_NAME];
@@ -58,6 +64,7 @@
             
             return ([place1Name compare:place2Name options:NSCaseInsensitiveSearch]);
         }];
+		 */
         
        // bSelf.topPlaces = [FlickrFetcher topPlaces];
         
