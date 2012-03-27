@@ -114,7 +114,23 @@
     }
 }
 
-
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+	// iPhone support to display the photo
+	//
+	if([sender isKindOfClass:[UITableViewCell class]]){ // just in case we add other ways to segue in the future
+		
+		NSIndexPath * indexPath = nil; 
+		indexPath = [self.tableView indexPathForCell:sender];
+		Photo *photo = [self.taggedPhotos objectAtIndex:[indexPath row]];
+		
+		id destinationController = [segue destinationViewController];
+		if([destinationController isKindOfClass:[VacationPhotoViewController class]]) { // make the storyboard editor honest
+			VacationPhotoViewController *vpvc = (VacationPhotoViewController*) destinationController;
+			[vpvc setPhoto:photo];
+		}
+	}
+	
+}
 
 #pragma mark - Table view data source
 

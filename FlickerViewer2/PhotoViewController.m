@@ -112,9 +112,11 @@
                     if(zoom > 1) { // only zoom in, never out. don't want any white lines
                         [bSelf.scrollView setZoomScale:zoom animated:NO];
                     }
-                    //NSLog(@"%@ scrollviw width %f scrollviw height %f", self.photoName, scrollSize.width, scrollSize.height ); 
-                    //NSLog(@"%@ imagesize width %f imagesize height %f", self.photoName, imageSize.width, imageSize.height ); 
-                    //NSLog(@"%@ Zoom x %f zoom y %f zoom to %f", self.photoName, zoomX, zoomY, zoom);                    
+                    NSLog(@"%@ scrollviw width %f scrollviw height %f", self.photoName, scrollSize.width, scrollSize.height ); 
+                    NSLog(@"%@ imagesize width %f imagesize height %f", self.photoName, imageSize.width, imageSize.height ); 
+                    NSLog(@"%@ Zoom x %f zoom y %f zoom to %f", self.photoName, zoomX, zoomY, zoom);   
+					NSLog(@"  ");
+					
                 }
             }
             
