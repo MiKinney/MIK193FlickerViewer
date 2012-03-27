@@ -96,26 +96,27 @@
                 //  don't show any white space when  displaying image.
                 [bSelf.scrollView setZoomScale:1 animated:NO]; //  make sure this is set before we set contentsize with image size, since contentsize changes when zoomed
                 // scroll view needs to know the size of the content to scroll over, regardless of any zoomin
-                bSelf.scrollView.contentSize = bSelf.imageView.bounds.size;
+                //bSelf.scrollView.contentSize = bSelf.imageView.bounds.size;
+				bSelf.scrollView.contentSize = bSelf.imageView.image.size;
                 
                 // 
                 CGSize scrollSize = bSelf.scrollView.bounds.size;
-                // CGSize imageSize = bSelf.imageView.image.size; 
-                CGSize imageSize = bSelf.imageView.bounds.size; // using bounds.size works better than using image.size, which is not what I would expect
-                
-                
+                CGSize imageSize = bSelf.imageView.image.size; 
+                 
                 if(imageSize.width > 0 && imageSize.height > 0) { // don't know why these would ever be 0, but test anyway since this is a division...
                     // this zoom calulation logic is suspect...
                     float zoomX = (scrollSize.width / imageSize.width ); 
                     float zoomY = (scrollSize.height/ imageSize.height);
                     float zoom = MAX(zoomX, zoomY);
-                    if(zoom > 1) { // only zoom in, never out. don't want any white lines
-                        [bSelf.scrollView setZoomScale:zoom animated:NO];
-                    }
-                    NSLog(@"%@ scrollviw width %f scrollviw height %f", self.photoName, scrollSize.width, scrollSize.height ); 
-                    NSLog(@"%@ imagesize width %f imagesize height %f", self.photoName, imageSize.width, imageSize.height ); 
-                    NSLog(@"%@ Zoom x %f zoom y %f zoom to %f", self.photoName, zoomX, zoomY, zoom);   
+               
+					[bSelf.scrollView setZoomScale:zoom animated:NO];
+              
+					/*
+                    NSLog(@"did load zoom %@ scrollviw width %f scrollviw height %f", bSelf.photoName, scrollSize.width, scrollSize.height ); 
+                    NSLog(@"did load zoom %@ imagesize width %f imagesize height %f", bSelf.photoName, imageSize.width, imageSize.height ); 
+                    NSLog(@"did load zoom %@ Zoom x %f zoom y %f zoom to %f", self.photoName, zoomX, zoomY, zoom);   
 					NSLog(@"  ");
+					 */
 					
                 }
             }
@@ -130,6 +131,46 @@
     });
     
 }
+
+
+- (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+	// need to adjust zooming when we rotate	
+	//  don't show any white space when  displaying image.
+	self.imageView.frame = CGRectMake(0, 0,self.imageView.image.size.width, self.imageView.image.size.height);
+	// todo make this a separate method, since also used in load op above...
+	[self.scrollView setZoomScale:1 animated:NO]; //  make sure this is set before we set contentsize with image size, since contentsize changes when zoomed
+	// scroll view needs to know the size of the content to scroll over, regardless of any zoomin
+	self.scrollView.contentSize = self.imageView.image.size;
+	
+	// 
+	CGSize scrollSize = self.scrollView.bounds.size;
+	CGSize imageSize = self.imageView.image.size; 
+	
+	
+	
+	if(imageSize.width > 0 && imageSize.height > 0) { // don't know why these would ever be 0, but test anyway since this is a division...
+		// this zoom calulation logic is suspect...
+		float zoomX = (scrollSize.width / imageSize.width ); 
+		float zoomY = (scrollSize.height/ imageSize.height);
+		float zoom = MAX(zoomX, zoomY);
+		
+		[self.scrollView setZoomScale:zoom animated:NO];
+		
+		/*
+		NSLog(@"did rotate zoom %@ scrollviw width %f scrollviw height %f", self.photoName, scrollSize.width, scrollSize.height ); 
+	    NSLog(@"did rotate zoom %@ imagesize width %f imagesize height %f", self.photoName, imageSize.width, imageSize.height ); 
+		
+		NSLog(@"did rotate zoom %@ Zoom x %f zoom y %f zoom to %f", self.photoName, zoomX, zoomY, zoom);   
+		NSLog(@"  ");
+		 */
+		
+	}	
+	
+	// todo - bug - do I need to relayout views or something after rotation ?  rotating from landscape to portrait on iPhone, one can flip the picture off the screen ! (but still get it back)
+	// where as if already in portrait mode for same picture, behavior is ok.  note that the zoom factor is ok in both cases 
+	
+}
+
 
 // given a flicker photo dictionary, extract photo info from dictionary 
 // and load image if on screen,  or setup to load the actual image
@@ -265,6 +306,7 @@
         return YES;
     }
 }
+
 
 #pragma mark SubstitutableDetailViewController
 // the DetailViewSelectorController is the splitViewController's delegate, the DetailViewSelectorController 
