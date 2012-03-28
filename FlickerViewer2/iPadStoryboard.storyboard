@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="1.1" toolsVersion="2182" systemVersion="11D50" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="WHM-Sm-Sl0">
     <dependencies>
-        <deployment defaultVersion="1296" identifier="iOS"/>
         <development defaultVersion="4200" identifier="xcode"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1181"/>
     </dependencies>
@@ -350,11 +349,11 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" minimumZoomScale="-5" maximumZoomScale="10" id="mNK-yj-9KE">
-                                <rect key="frame" x="0.0" y="87" width="703" height="612"/>
+                                <rect key="frame" x="0.0" y="84" width="703" height="615"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" id="PFF-cK-ZTF">
-                                        <rect key="frame" x="0.0" y="-8" width="703" height="620"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" id="PFF-cK-ZTF">
+                                        <rect key="frame" x="0.0" y="0.0" width="703" height="617"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     </imageView>
                                 </subviews>
@@ -408,7 +407,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="-5" maximumZoomScale="10" id="Vly-uY-VZa">
-                                <rect key="frame" x="-20" y="88" width="743" height="631"/>
+                                <rect key="frame" x="-20" y="88" width="743" height="611"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" id="4ig-sa-p7d">
@@ -422,7 +421,7 @@
                                 </connections>
                             </scrollView>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Recent" id="VNh-Y8-jV0"/>
@@ -435,7 +434,7 @@
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="394" y="2186"/>
+            <point key="canvasLocation" x="406" y="2187"/>
         </scene>
         <!--Vacation Photo View Controller - Vacation-->
         <scene sceneID="3cT-E4-Pay">
