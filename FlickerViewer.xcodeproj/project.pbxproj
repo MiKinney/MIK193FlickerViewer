@@ -280,6 +280,8 @@
 				1F17FA7014F6E48D006ED747 /* PhotoViewController.m */,
 				1F11B0A314FDABA200118D5D /* RecentPhotosTableViewController.h */,
 				1F11B0A414FDABA200118D5D /* RecentPhotosTableViewController.m */,
+				1FB0D30D1518442900703037 /* VacationPhotoViewController.h */,
+				1FB0D30E1518442900703037 /* VacationPhotoViewController.m */,
 			);
 			name = Photo;
 			sourceTree = "<group>";
@@ -294,8 +296,6 @@
 				1F48F2C215143CAE0074A3C3 /* AllPhotosForOneTagTableViewController.m */,
 				1F1D9C64150F94A00005A0BE /* VacationItineraryTableViewController.h */,
 				1F1D9C65150F94A00005A0BE /* VacationItineraryTableViewController.m */,
-				1FB0D30D1518442900703037 /* VacationPhotoViewController.h */,
-				1FB0D30E1518442900703037 /* VacationPhotoViewController.m */,
 				1F1D9C61150F92850005A0BE /* VacationPlacePhotosTableViewController.h */,
 				1F1D9C62150F92850005A0BE /* VacationPlacePhotosTableViewController.m */,
 				1FC1458E150E4F7A00D9263D /* VacationShortCutTableViewController.h */,

@@ -17,6 +17,9 @@
 @property (strong, nonatomic) PhotosCacheController * cacheController;
 @property (readonly) dispatch_queue_t downloadQueue;
 
+- (void) centerScrollViewContents;
+- (void)setMaxMinZoomScalesForCurrentBounds:(PhotoViewController *) controller;
+- (void) loadPhoto;
 
 @end
 
@@ -50,128 +53,6 @@
     return _downloadQueue;
 }
 
-
-// download the photo from flicker (unless locally cached) then update view with it
-//  
-- (void) loadPhoto{
-    
- 
-    __block NSData *photoFile;
-    __block typeof (self) bSelf = self;
-   
-    
-    MIKActivityIndicatorView* spinner = [[MIKActivityIndicatorView alloc] initWithView:self.view];
-    [spinner startAnimating]; 
-
-    dispatch_async(self.downloadQueue, ^{
-        
-        // check for cached photo first 
-        photoFile = [bSelf.cacheController getCachedPhotoData:self.photoURL];
-       
-        // fetch from flicker if we don't have a cached file yet
-        if(!photoFile) {
-            // from flicker on the net
-            photoFile = [NSData dataWithContentsOfURL:bSelf.photoURL];
-            // cache the new one
-            [bSelf.cacheController addPhotoDataToCache:photoFile forPhotoURL:bSelf.photoURL];
-        }  
-        
-        // update the u.i. on it's thread
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (photoFile) {
-                
-                // title for user
-                bSelf.photoTitleLabel.text = self.photoName;  
-
-                // set the image in the view
-                bSelf.imageView.image = [[UIImage alloc] initWithData:photoFile];    
-                
-                // NSLog(@"%@ imageview size width %f imageview size height %f", self.photoName, bSelf.imageView.image.size.width, bSelf.imageView.image.size.height); 
-                // since we assigned the image, rather than originally initing the imageView with the image in it, we need to manually set the frame size
-                bSelf.imageView.frame = CGRectMake(0, 0,bSelf.imageView.image.size.width, bSelf.imageView.image.size.height);
-                // NSLog(@"%@ frame size width %f frame size height %f", self.photoName, bSelf.imageView.frame.size.width, bSelf.imageView.frame.size.height); 
-                
-                // scrolling - todo - not working the way I want... example, selecting the same image twice in a row gives different visible 'zooms', even though my setZoomScale is the same
-                //
-                //  don't show any white space when  displaying image.
-                [bSelf.scrollView setZoomScale:1 animated:NO]; //  make sure this is set before we set contentsize with image size, since contentsize changes when zoomed
-                // scroll view needs to know the size of the content to scroll over, regardless of any zoomin
-                //bSelf.scrollView.contentSize = bSelf.imageView.bounds.size;
-				bSelf.scrollView.contentSize = bSelf.imageView.image.size;
-                
-                // 
-                CGSize scrollSize = bSelf.scrollView.bounds.size;
-                CGSize imageSize = bSelf.imageView.image.size; 
-                 
-                if(imageSize.width > 0 && imageSize.height > 0) { // don't know why these would ever be 0, but test anyway since this is a division...
-                    // this zoom calulation logic is suspect...
-                    float zoomX = (scrollSize.width / imageSize.width ); 
-                    float zoomY = (scrollSize.height/ imageSize.height);
-                    float zoom = MAX(zoomX, zoomY);
-               
-					[bSelf.scrollView setZoomScale:zoom animated:NO];
-              
-					/*
-                    NSLog(@"did load zoom %@ scrollviw width %f scrollviw height %f", bSelf.photoName, scrollSize.width, scrollSize.height ); 
-                    NSLog(@"did load zoom %@ imagesize width %f imagesize height %f", bSelf.photoName, imageSize.width, imageSize.height ); 
-                    NSLog(@"did load zoom %@ Zoom x %f zoom y %f zoom to %f", self.photoName, zoomX, zoomY, zoom);   
-					NSLog(@"  ");
-					 */
-					
-                }
-            }
-            
-            // note how  so we don't show the button state before photo is loaded, we call this in the queue, after the photo is loaded.
-            [self setVisitButtonToMatchPhotoVacationPresence]; // do this after we load,
-                        
-            [spinner stopAnimating]; // make sure we stop, even if no photo file
-              
-        });
-        
-    });
-    
-}
-
-
-- (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-	// need to adjust zooming when we rotate	
-	//  don't show any white space when  displaying image.
-	self.imageView.frame = CGRectMake(0, 0,self.imageView.image.size.width, self.imageView.image.size.height);
-	// todo make this a separate method, since also used in load op above...
-	[self.scrollView setZoomScale:1 animated:NO]; //  make sure this is set before we set contentsize with image size, since contentsize changes when zoomed
-	// scroll view needs to know the size of the content to scroll over, regardless of any zoomin
-	self.scrollView.contentSize = self.imageView.image.size;
-	
-	// 
-	CGSize scrollSize = self.scrollView.bounds.size;
-	CGSize imageSize = self.imageView.image.size; 
-	
-	
-	
-	if(imageSize.width > 0 && imageSize.height > 0) { // don't know why these would ever be 0, but test anyway since this is a division...
-		// this zoom calulation logic is suspect...
-		float zoomX = (scrollSize.width / imageSize.width ); 
-		float zoomY = (scrollSize.height/ imageSize.height);
-		float zoom = MAX(zoomX, zoomY);
-		
-		[self.scrollView setZoomScale:zoom animated:NO];
-		
-		/*
-		NSLog(@"did rotate zoom %@ scrollviw width %f scrollviw height %f", self.photoName, scrollSize.width, scrollSize.height ); 
-	    NSLog(@"did rotate zoom %@ imagesize width %f imagesize height %f", self.photoName, imageSize.width, imageSize.height ); 
-		
-		NSLog(@"did rotate zoom %@ Zoom x %f zoom y %f zoom to %f", self.photoName, zoomX, zoomY, zoom);   
-		NSLog(@"  ");
-		 */
-		
-	}	
-	
-	// todo - bug - do I need to relayout views or something after rotation ?  rotating from landscape to portrait on iPhone, one can flip the picture off the screen ! (but still get it back)
-	// where as if already in portrait mode for same picture, behavior is ok.  note that the zoom factor is ok in both cases 
-	
-}
-
-
 // given a flicker photo dictionary, extract photo info from dictionary 
 // and load image if on screen,  or setup to load the actual image
 // 
@@ -191,6 +72,157 @@
         }        
     } 
 }
+
+// download the photo from flicker (unless locally cached) then update view with it
+//  
+- (void) loadPhoto{
+     
+    __block NSData *photoFile;
+    __block typeof (self) bSelf = self;
+   
+    MIKActivityIndicatorView* spinner = [[MIKActivityIndicatorView alloc] initWithView:self.view];
+    [spinner startAnimating]; 
+
+    dispatch_async(self.downloadQueue, ^{
+        
+        // check for cached photo first 
+        photoFile = [bSelf.cacheController getCachedPhotoData:self.photoURL];
+       
+        // fetch from flicker if we don't have a cached file yet
+        if(!photoFile) {
+            // from flicker on the net
+            photoFile = [NSData dataWithContentsOfURL:bSelf.photoURL];
+            // cache the new one
+            [bSelf.cacheController addPhotoDataToCache:photoFile forPhotoURL:bSelf.photoURL];
+        }  
+        
+        // update the u.i. on it's thread
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (photoFile) {
+				
+				// reusing scrollview, reset zoom scale to 1 before setting any frame or content,
+				// otherwise the imageView.frame size will keeping growing, by factors of 2, 3... after everytime we call loadPhoto and set a zoom level
+                [bSelf.scrollView setZoomScale:1 animated:NO]; //  make sure this is set before we set contentsize with image size, since contentsize changes when zoomed
+
+               	// remove old image, begin new... 			
+				[bSelf.imageView removeFromSuperview];				
+                // new displayable image from the photo file we fetched earlier
+				bSelf.imageView.image = nil;
+                bSelf.imageView.image = [[UIImage alloc] initWithData:photoFile]; 
+				// NSLog(@"%@ imageview size width %f imageview size height %f", self.photoName, bSelf.imageView.image.size.width, bSelf.imageView.image.size.height); 
+                // since we assigned the image, rather than originally initing the imageView with the image in it, we need to manually set the frame size
+                bSelf.imageView.frame = CGRectMake(0, 0,bSelf.imageView.image.size.width, bSelf.imageView.image.size.height);
+				
+				//NSLog(@"   ");
+				//NSLog(@"imageFrameSize on load photo is width %f frame size height %f",bSelf.imageView.frame.size.width, bSelf.imageView.frame.size.height); 
+				
+			    // update scrollview with new view, since  we removed the old one. fresh / reset image data each new phot
+				[bSelf.scrollView addSubview:bSelf.imageView];
+				
+				// scroll view needs image size it will scroll over (note to always clear zoom to 1, reset it, 
+				// before setting this content, as it's affect by zoom setting.
+				[bSelf.scrollView setContentOffset:CGPointZero]; // in case prior photo was scrolled, this will put scroll view bound back to it's frame's bounds
+				bSelf.scrollView.contentSize = bSelf.imageView.image.size;
+               				
+				// calculated a reasonable min / max value for this image;
+				//
+				[bSelf setMaxMinZoomScalesForCurrentBounds:bSelf];
+				
+				//NSLog(@"load photo zoom scale BEFORE zooming is %f",self.scrollView.zoomScale);
+				//NSLog(@"setting zoom scale to %f", self.scrollView.minimumZoomScale);
+				
+				[self.scrollView setZoomScale:self.scrollView.minimumZoomScale animated:NO];
+				
+				//NSLog(@"load photo zoom scale AFTER zooming %f",self.scrollView.zoomScale);
+				
+				// keep image centered in view...
+				[self centerScrollViewContents];
+			  
+			}
+            
+            // note how  so we don't show the button state before photo is loaded, we call this in the queue, after the photo is loaded.
+            [self setVisitButtonToMatchPhotoVacationPresence]; // do this after we load,
+			// title for user
+			bSelf.photoTitleLabel.text = self.photoName; 
+
+            [spinner stopAnimating]; // make sure we stop, even if no photo file
+              
+        });
+    });
+}
+
+// center the image as it becomes smaller than the size of the screen (code originated with apple example )
+// 
+- (void) centerScrollViewContents{
+	
+	// get the scrollView bounds, because from that we get the viewing size fo the scroll view onto the image
+	// compage that with the image frame size in width and height, to find diff in dimensions and use that to adjust center points in frame structure
+	CGSize boundsSize = self.scrollView.bounds.size;
+	CGRect frameToCenter = self.imageView.frame;
+	
+	// center horizontally
+	if (frameToCenter.size.width < boundsSize.width)
+		// image smaller than scroll view, adjust frames origin x component by finding diffs in widths
+		// a positive offset in along the x axis, is image frames upper left corner, bounds though is still 0,0
+		frameToCenter.origin.x = (boundsSize.width - frameToCenter.size.width) / 2.0f; 
+	else
+		// iamge is larger, then a true center would be a negative origin.x, if that was possible
+		frameToCenter.origin.x = 0; // so this will not center on positive zoom ??	
+	// center vertically
+	if (frameToCenter.size.height < boundsSize.height)
+		frameToCenter.origin.y = (boundsSize.height - frameToCenter.size.height) / 2.0f;
+	else
+		frameToCenter.origin.y = 0;	
+	
+	self.imageView.frame = frameToCenter;
+}
+
+
+// adapted apple source,  set's scroll min max zoom scale according to image size..
+// passing controller to  this method, so I can call it out of block, using bSelf...
+- (void)setMaxMinZoomScalesForCurrentBounds:(PhotoViewController *) controller;
+{
+	//NSLog(@"entering set max min zoom value");
+    CGSize boundsSize = controller.scrollView.bounds.size;
+	//NSLog(@"scrollboundsSize  is width %f and height %f", boundsSize.width, boundsSize.height);
+		
+	CGSize imageSize = controller.imageView.image.size; // apple bug had bounds size here, frame is the true image size
+	// NSLog(@"imageSize  is width %f and height %f", imageSize.width, imageSize.height);
+	
+	/*
+	CGSize scrollViewFrameSize = controller.scrollView.frame.size;
+	NSLog(@"scrollViewFrameSize  is width %f and height %f", scrollViewFrameSize.width, scrollViewFrameSize.height);
+	
+	CGSize imageFrameSize = controller.imageView.frame.size; // apple bug had bounds size here, frame is the true image size
+	NSLog(@"imageFrameSize  is width %f and height %f", imageFrameSize.width, imageFrameSize.height);
+	 
+	 CGSize contentSize = controller.scrollView.contentSize;
+	 NSLog(@"contentSize  is width %f and height %f", contentSize.width, contentSize.height);
+	*/
+	
+    // calculate min/max zoomscale
+    CGFloat xScale = boundsSize.width / imageSize.width;    // the scale needed to perfectly fit the image width-wise
+    CGFloat yScale = boundsSize.height / imageSize.height;  // the scale needed to perfectly fit the image height-wise
+    CGFloat minScale = MIN(xScale, yScale);                 // use minimum of these to allow the image to become fully visibl
+ 	self.scrollView.minimumZoomScale = minScale;
+	
+	// NSLog(@"min zoom scale using bounds  is %f", minScale);
+	
+}
+
+
+// keep the image centered as user zooms, or anything causes the zoom
+//
+- (void) scrollViewDidZoom:(UIScrollView *)scrollView {	
+	//	[self centerScrollViewContents];		
+	//NSLog(@"zoom scale after scrollViewDidZoon %f", scrollView.zoomScale);
+}
+
+- (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {	
+
+	[self centerScrollViewContents];	 
+}
+
 
 // based on photo presence in given VacationDocument, set button to display 'visit' or 'unvisit', 'vacation name',  
 // 
@@ -221,16 +253,15 @@
     VacationDocument * vacationDocument = [Vacations getOpenManagedVacation];
     if(vacationDocument) { // make sure it's open
         [self setVisitButtonToMatchPhotoVacationPresence:vacationDocument];
-    }
-    
+    }    
 }
 
 // add or remove presently displayed photo from vacation
 // 
 - (IBAction)visitButtonTouched:(UIBarButtonItem *)sender {
     
-    VacationDocument * document = [Vacations getOpenManagedVacation];
-    
+    VacationDocument * document = [Vacations getOpenManagedVacation];  
+	
     if(document) {       
         if([document photoExists:self.photoId]) {
             // we have a photo on vacation so remove it
@@ -245,9 +276,16 @@
             [self setVisitButtonToMatchPhotoVacationPresence:document];
         }   
     }
-    
 }
 
+#pragma mark scroll view image control
+
+#pragma mark scroll view delegates
+
+// note we set the min and max zoom values using the storyboard
+-(UIView *) viewForZoomingInScrollView:(UIScrollView *)scrollView{
+    return self.imageView;
+}
 
 #pragma mark - View lifecycle
 
@@ -307,8 +345,8 @@
     }
 }
 
-
 #pragma mark SubstitutableDetailViewController
+
 // the DetailViewSelectorController is the splitViewController's delegate, the DetailViewSelectorController 
 // shows / hides the buttons, then calls this on the view controller, that's how the DetailViewSelectorController
 // can support multiple detail views
@@ -329,12 +367,6 @@
     [self.toolBar setItems:itemsArray animated:NO];
 }
 
-#pragma mark scroll view delegates
-
-// note we set the min and max zoom values using the storyboard
--(UIView *) viewForZoomingInScrollView:(UIScrollView *)scrollView{
-    return self.imageView;
-}
 
 
 

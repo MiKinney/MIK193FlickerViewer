@@ -184,26 +184,25 @@
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dDh-7W-Fqx" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="q97-To-4iJ" customClass="PhotoViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="4Z6-fj-8iN">
+                    <view key="view" contentMode="scaleAspectFit" id="4Z6-fj-8iN">
                         <rect key="frame" x="0.0" y="64" width="320" height="367"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.20000000000000001" maximumZoomScale="5" id="Kol-6c-QD2">
-                                <rect key="frame" x="-20" y="-20" width="360" height="500"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="-5" maximumZoomScale="10" id="SCY-4Q-bV6">
+                                <rect key="frame" x="-20" y="-27" width="360" height="414"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="TopLeft" id="THb-xM-cbo">
-                                        <rect key="frame" x="20" y="20" width="320" height="460"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" id="l5J-yx-xIg">
+                                        <rect key="frame" x="20" y="20" width="320" height="374"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     </imageView>
                                 </subviews>
-                                <color key="backgroundColor" red="0.20000000298023224" green="0.20000000298023224" blue="0.20000000298023224" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
-                                    <outlet property="delegate" destination="q97-To-4iJ" id="yLL-LQ-25Q"/>
+                                    <outlet property="delegate" destination="q97-To-4iJ" id="Bqh-to-n7k"/>
                                 </connections>
                             </scrollView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="SEq-MO-0FP">
                         <barButtonItem key="rightBarButtonItem" title="Visit" id="Olp-ye-me7">
@@ -213,8 +212,8 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="imageView" destination="THb-xM-cbo" id="psw-5G-d4D"/>
-                        <outlet property="scrollView" destination="Kol-6c-QD2" id="tEV-IR-tOA"/>
+                        <outlet property="imageView" destination="l5J-yx-xIg" id="sYf-Hs-hoX"/>
+                        <outlet property="scrollView" destination="SCY-4Q-bV6" id="5pk-4E-Zfp"/>
                         <outlet property="visitButton" destination="Olp-ye-me7" id="Sfu-Vz-YsL"/>
                     </connections>
                 </viewController>
@@ -599,21 +598,23 @@
                 <viewController id="ej4-Ir-jcC" customClass="VacationPhotoViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="wtJ-AS-Dsv">
                         <rect key="frame" x="0.0" y="64" width="320" height="367"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="FbB-Au-fqf">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="-5" maximumZoomScale="10" id="FbB-Au-fqf">
                                 <rect key="frame" x="-20" y="-20" width="360" height="407"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" id="KRh-Zd-wYa">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" id="KRh-Zd-wYa">
                                         <rect key="frame" x="20" y="20" width="320" height="367"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     </imageView>
                                 </subviews>
-                                <color key="backgroundColor" red="0.20000000298023224" green="0.20000000298023224" blue="0.20000000298023224" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="delegate" destination="ej4-Ir-jcC" id="7Uk-mE-44q"/>
+                                </connections>
                             </scrollView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="bbQ-lB-fZi">
                         <barButtonItem key="rightBarButtonItem" title="Visit" id="xOj-yg-E2D">
@@ -732,8 +733,8 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="tyV-Wt-xgf"/>
-        <segue reference="8i6-se-vxb"/>
         <segue reference="7tD-5h-dLp"/>
+        <segue reference="sDE-lb-p1h"/>
+        <segue reference="8i6-se-vxb"/>
     </inferredMetricsTieBreakers>
 </document>
