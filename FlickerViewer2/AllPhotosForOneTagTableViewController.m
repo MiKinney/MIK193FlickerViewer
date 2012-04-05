@@ -19,7 +19,6 @@
 @property (strong, nonatomic) NSMutableArray * taggedPhotos;
 
 
-
 @end
 
 @implementation AllPhotosForOneTagTableViewController

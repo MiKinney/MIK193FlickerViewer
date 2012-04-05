@@ -3,8 +3,8 @@
 //  FlickerViewer2
 //
 //  Created by Michael Kinney on 3/19/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
-//
+//  Copyright (c) 2012 All rights reserved.
+//  See header for class description
 
 #import "DetailViewSelectorController.h"
 
@@ -20,35 +20,34 @@
 @synthesize popoverController = popoverController;
 @synthesize rootPopoverButtonItem = _rootPopoverButtonItem;
 
-#define PHOTO_CONTROLLER_INDEX 0
-#define RECENT_PHOTO_CONTROLLER_INDEX 1
-#define VACATION_PHOTO_CONTROLLER_INDEX 2
-
-#pragma mark - View lifecycle
-
+// these must match the splitview controllers master view tabbarcontroller index as shown in Storyboard 
+// changing  the tab order in the Storyboard during development, requires changing these indexes
+#define PHOTO_CONTROLLER_INDEX 0 // Top Rated tab
+#define RECENT_PHOTO_CONTROLLER_INDEX 1  // Recents tab
+#define VACATION_PHOTO_CONTROLLER_INDEX 2 // vacation tab
+ 
+// external access to our view controllers
 // 
-// self.viewControllersare at same index as tabs
-// hopefully these all exist when called, is true as long as view is displayed at least once
-// which will happen for sure when didSelectViewController, below, executes for each selected index;
+// these should each exist when called, as long as view is displayed at least once
+// the views will display when didSelectViewController executes, when user touches a tab
 //
-- (PhotoViewController *) photoViewController {
-    
+// controller for top rated
+- (PhotoViewController *) photoViewController {    
     return (PhotoViewController *) [self.viewControllers objectAtIndex:PHOTO_CONTROLLER_INDEX];    
 }
 
-// same class type as , different instance
-- (PhotoViewController *) recentPhotoViewController {
-    
+// controller for recents, ame class type as above , different instance
+- (PhotoViewController *) recentPhotoViewController {    
     return (PhotoViewController *) [self.viewControllers objectAtIndex:RECENT_PHOTO_CONTROLLER_INDEX];    
 }
 
+// controller for vacations
 - (VacationPhotoViewController *) vacationPhotoViewController {
-    
     return (VacationPhotoViewController *) [self.viewControllers objectAtIndex:VACATION_PHOTO_CONTROLLER_INDEX];    
 }
 
+#pragma mark - View lifecycle
 
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -72,13 +71,35 @@
 }
 
 
+
+#pragma mark UITabBarControllerDelegate 
+
+// the UITabBarControllerDelegate delegate is set in this class's viewDidLoad messsage 
+//
+- (void) tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
+    
+    // find which tab bar button was selected by user in the Master view tab bar controller,
+	// change the displayed controller
+    // setting our DetailViewSelectorController's selectedIndex to tabBarController.selectedIndex keeps the detail views in sync with the selected view in the master view tab bar
+    // 
+    self.selectedIndex = tabBarController.selectedIndex; // we change detail views when the master view's tab bar buttons are touched
+    
+    // Configure the displayed controllers popover button (after the view has been displayed and its toolbar has been created).
+    if (self.rootPopoverButtonItem != nil) {
+        // have to remove the existing button (if any) from the toolbar first, otherwise as you keep touching a tab controller button in the master view, the button will walk across the toolbar !
+        [[self.viewControllers objectAtIndex:self.selectedIndex] invalidateRootPopoverButtonItem:self.rootPopoverButtonItem];
+        [[self.viewControllers objectAtIndex:self.selectedIndex] showRootPopoverButtonItem:self.rootPopoverButtonItem];
+    }
+    
+}
+
 #pragma mark UISplitViewControllerDelegate
 
 // the UISplitViewControllerDelegate delegate is set in MIPAppDelegate.m's 
 // control display of popover button when iPad is rotated between portrait and landscape modes
 - (void)splitViewController:(UISplitViewController*)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem forPopoverController:(UIPopoverController*)pc {
     // apple example code, adapted for my usage
-    // Keep references to the popover controller and the popover button, and tell the detail view controller to show the button.
+    // Keep references to the popover controller and the popover button, and tell our currently selected view controller to show the button.
     barButtonItem.title = @"Photos";
     self.popoverController = pc;
     self.rootPopoverButtonItem = barButtonItem;
@@ -94,7 +115,7 @@
 
 - (void)splitViewController:(UISplitViewController*)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
     
-    // Nil out references to the popover controller and the popover button, and tell the detail view controller to hide the button.
+    // Nil out references to the popover controller and the popover button, and tell our currently selected view controller to hide the button.
     // the button is actually shown / hidden by our delegate implemented in the currently displayed controller
     // 
     id controller = [self.viewControllers objectAtIndex:self.selectedIndex];
@@ -105,29 +126,6 @@
     }
 }
 
-
-#pragma mark UITabBarControllerDelegate 
-// the UITabBarControllerDelegate delegate is set in this class's viewDidLoad messsage 
-
-- (void) tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
-    
-    // find which tab bar button was selected by user in the Master view tab bar controller,
-    // this is slightly fragile, I layed out the storyboard order for the detail view tab controller to match the master view tab bar
-    // index == 0 is 'Top Rated', index == 1 is 'Recents' and index == 2 is 'Favorites' button
- 
-    // change the displayed controller
-    // setting this DetailViewSelectorControllers  selectedIndex to tabBarController.selectedIndex keeps the detail views in sync with the selected view in the master view tab bar
-    // 
-    self.selectedIndex = tabBarController.selectedIndex; // we change detail views when the master view's tab bar buttons are touched
-    
-    // Configure the displayed controllers popover button (after the view has been displayed and its toolbar has been created).
-    if (self.rootPopoverButtonItem != nil) {
-        // have to remove the existing button (if any) from the toolbar first, otherwise as you keep clicking a tab controller button in the master view, the button will walk across the toolbar !
-        [[self.viewControllers objectAtIndex:self.selectedIndex] invalidateRootPopoverButtonItem:self.rootPopoverButtonItem];
-        [[self.viewControllers objectAtIndex:self.selectedIndex] showRootPopoverButtonItem:self.rootPopoverButtonItem];
-    }
-    
-}
 
 #pragma mark other
 

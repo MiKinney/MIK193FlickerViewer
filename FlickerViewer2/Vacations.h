@@ -5,9 +5,9 @@
 //  Created by Michael Kinney on 3/15/12.
 //  Copyright (c) 2012 . All rights reserved.
 //
-// access to the a vacation managed document
+// access to a vacation managed document
 // may only have one document open at same time
-// also convience method to get all persisted vacations.
+// also convenience method to get all persisted vacations.
 
 #import <Foundation/Foundation.h>
 #import "VacationDocument.h"

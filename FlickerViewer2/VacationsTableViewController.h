@@ -3,7 +3,7 @@
 //  FlickerViewer2
 //
 //  Created by Michael Kinney on 3/9/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012  All rights reserved.
 //
 //  This is a simple  list of all vacations displayed by name
 //  From it, user selects vacation to view itinerary and tags

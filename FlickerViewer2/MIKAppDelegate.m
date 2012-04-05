@@ -18,26 +18,31 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-     // Override point for customization after application launch.
-    // setup up split view controllers delegatge
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+    // if on iPad, setup up split view controllers delegate
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) { 
         UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
-        // get our detail view controller
+        // get our detail view controller, which is my own container / controller for other controllers
         DetailViewSelectorController * detailViewSelectorController = [splitViewController.viewControllers lastObject]; // 
             
-        // the DetailViewSelectorController use's the split view's delegate to  control display of popover buttons in portrait / landscape mode for each detail
+        // the DetailViewSelectorController use's the split view's show/hide methods to  control
+		//  display of popover buttons in portrait / landscape mode for each controller in the detail view controller
         // 
         splitViewController.delegate = (id) detailViewSelectorController;  
-            
+		
     }
       
-    // make sure we have at least a default vacation document on disk and open
-    // refactor : this is for 'demo purposes', so a user sees a 'My Vacation' the first time they run the app
-    // refactor : better solution is persist the last opened vacation and only open the default if nothing yet persisted.
+    // make sure we have at least a default vacation document on disk the first time user uses the app
+    // open the last vacation viewed, if any, create the default if nothing yet persisted.
     //
     NSArray * vacationNames = [Vacations getVacationNames];
-    if(vacationNames.count == 0)
+    if(vacationNames.count > 0)
     {
+		// we already have created vacations, get the last one used and open it 
+        [Vacations openVacation:[Vacations getLastOpenedVacationName] done:^(BOOL success) {
+            // hopefully it opened, not sending a message in this 'demo'
+        }];
+		
+    } else {
         // create the default since nothing exists
         [Vacations createVacation:@"" done:^(VacationDocument *document) {
             // open it so it's ready for use by default
@@ -45,20 +50,15 @@
                 [Vacations openVacation:document.vacationName done:^(BOOL success) {
                     // hopefully it opened, not sending a message in this 'demo'
                 }];
-             }
+			}
         }];
-    } else {
-        // we already have created vacations, get the last one used and open it 
-        [Vacations openVacation:[Vacations getLastOpenedVacationName] done:^(BOOL success) {
-            // hopefully it opened, not sending a message in this 'demo'
-        }];
+       
     }
-         
-                    
+                             
     return YES;
 }
 
-					
+// 					
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     /*
@@ -69,7 +69,7 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    // todo - close open vacations
+    // todo - close open vacations, but check first that UIManagedDocument doesn't do this on it's own.
     
     /*
      Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 

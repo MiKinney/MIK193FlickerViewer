@@ -3,17 +3,25 @@
 //  FlickerViewer2
 //
 //  Created by Michael Kinney on 3/19/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
-//  This class keeps in synce the photos displayed in the iPads detail view with the 
-//  master, recents, favorites selection make in the master views tab bar
-//  This is the split view controllers detail view class
-//  This is a subclass of UITabBarController
-//  It's view controllers are of photo view, recent photo view, and vacation view controllers
-//  This class is also the delegate of the split view controllers master view tab bar controller
-//  when a user selects master, recents, for favorites, e.g. vacation tabs, in the master view
-//  the master view sends a message to our implementation of didSelectViewController, which
+//  Copyright (c) 2012  All rights reserved.
+// 
+//  DetailViewBuilderController is the split view controllers detail view controller class. 
+//
+//  It is my own subclass of UITabBarController. Refactor : Different base class. 
+
+//  The DetailViewBuilderController is a form of container controller
+//
+//  This DetailViewSelectorController class keeps in sync the photos displayed in the iPads detail view with 
+//  the master, recents, favorites selection make in the master views tab bar, by switching view controllers 
+//  
+//  DetailViewSelectorController view controllers are of photo view, recent photo view, and vacation view controllers
+//  (The iPad Storyboard graphically shows these relationships.)
+//  when a user selects master, recents, or favorites, e.g. vacation tabs, in the master view
+//  the master view sends a message to our implementation of UITabBarController didSelectViewController, which
 //  this class use's to programmatically switch between the photo, recent or vacation views shown
-//  in the detail view
+//  in the detail view. 
+// 
+//  This is beyond the Stanford CS193P requirements. Assignments did not require this sync behavior. 
 //  
 //  
 
@@ -22,13 +30,14 @@
 @class PhotoViewController;
 @class VacationPhotoViewController;
 
-// example directly from apple
+// adapted from Apple example. My embedded controllers use this to show / hide popover buttons
+//
 @protocol SubstitutableDetailViewController
 - (void)showRootPopoverButtonItem:(UIBarButtonItem *)barButtonItem;
 - (void)invalidateRootPopoverButtonItem:(UIBarButtonItem *)barButtonItem;
 @end
 
-// my stuff
+//
 @interface DetailViewSelectorController : UITabBarController
 
 // access the view controllers that are managed by the embedded tab  bar controller

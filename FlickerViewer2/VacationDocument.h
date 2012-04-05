@@ -5,9 +5,7 @@
 //  Created by Michael Kinney on 3/15/12.
 //  Copyright (c) 
 //
-//  Each document is a UIManagedDocument specific a vacation with it's own managedObjectContext
-//  this allows  opening multiple vacation documents at one time
-//  but only one instance for each vacation name...
+//  Each document is a UIManagedDocument specific to a vacation with it's own managedObjectContext
 
 #import <UIKit/UIKit.h>
 #import "Photo.h"

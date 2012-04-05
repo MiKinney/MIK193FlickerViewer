@@ -3,8 +3,10 @@
 //  FlickerViewer2
 //
 //  Created by Michael Kinney on 3/21/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
-//
+//  Copyright (c) 2012 All rights reserved.
+//  used modally to allow user to add a new vacation
+//  has it's own .xib file separate from the Storyboards
+//  
 
 #import <UIKit/UIKit.h>
 

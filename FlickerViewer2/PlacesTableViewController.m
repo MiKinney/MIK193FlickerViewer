@@ -3,7 +3,7 @@
 //  FlickerViewer2
 //
 //  Created by Michael Kinney on 2/17/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 All rights reserved.
 //
 
 #import "PlacesTableViewController.h"
@@ -12,8 +12,6 @@
 #import "PlacesMapAnnotation.h"
 #import "MIKActivityIndicatorView.h"
 #import "DTCustomColoredAccessory.h"
-
-
 
 @interface PlacesTableViewController() <MapViewControllerDelegate, PhotosDataSourceDelegate>
 
@@ -42,17 +40,19 @@
     // 
     dispatch_queue_t downloadQueue = dispatch_queue_create("Flicker Fetch", NULL);
     dispatch_async(downloadQueue, ^{
-        // do the download
         
+		 // do the download from flicker
+	     //
          bSelf.topPlaces = [FlickrFetcher topPlaces];
 		
-        // the results are returned in order of most tagged...this shows them in alphabetical order
-		// after using the app this way, I realized the results when alphabetical, are really shown as 'top-rated' anymore
-		// and thus look the same, when alphabetized, all the time
-        // Refactor - a switch to let user choose between sorted / unsorted
+        // the results are returned in order of top rated places...the following sort changes the order to alphabetical order
+		// after using the app this way, I realized the results when alphabetical, you loose the visual 'top-rated' listing
+		// 
+        // Refactor - a switch to let user choose between sorted - alphavbetical and  unsorted - top rated
 		/*
 		 unsortedPlaces = [FlickrFetcher topPlaces];
-
+		// sorting using a block
+		//
         bSelf.topPlaces = [unsortedPlaces sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
             NSDictionary * place1 = (NSDictionary *) obj1;
             NSString * place1Name = [place1 valueForKey:FLICKR_PLACE_NAME];
@@ -65,8 +65,6 @@
             return ([place1Name compare:place2Name options:NSCaseInsensitiveSearch]);
         }];
 		 */
-        
-       // bSelf.topPlaces = [FlickrFetcher topPlaces];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             // update table on main que
@@ -89,7 +87,8 @@
  }
 
 // helper to build annotations for map, not part of a map delegate
-// returns array of PlacesMapAnnotation objects 
+// returns array of PlacesMapAnnotation objects
+// refactor this out... 
 - (NSArray *) mapAnnotations
 {
     NSMutableArray * annotations = [[NSMutableArray alloc] initWithCapacity:self.topPlaces.count];
@@ -102,7 +101,7 @@
 }
 
 #pragma mark MapViewControllerDelegate
-
+// refactor this out....
 - (NSDictionary *) mapViewController:(MapViewController *)sender imageForAnnotation:(id<MKAnnotation>)annotation
 {
     // flicker does not have images for the actual Place, only for the photos in that place.
@@ -118,8 +117,9 @@
 
 #pragma mark - Photos place datasource delgate
 
-// provide the last  place touched by user's in the table view
-// this is the photos controller's model
+// provide the last place touched by user's in the table view
+// this is the how photo controller get's the selectd place
+// Refactor - maybe instead set this in the segue to the photo controller
 - (NSDictionary *) place{
     return self.selectedTopPlace;
 }
@@ -211,8 +211,7 @@
         MapViewController * mvc = (MapViewController*) destinationController;
         mvc.delegate = self;
         mvc.annotations = [self mapAnnotations];
-    }
-    
+    }    
 }
 
 
@@ -223,13 +222,14 @@
 {
     [super viewDidLoad];    
     
-    // fetch topplaces from flicker
-    // do this here and no on viewWillAppear, don't want to fetch from flicker everytime user tabs to this view
+	// fetch topplaces from flicker
+    // do this here and not on viewWillAppear, don't want to fetch from flicker everytime user tabs to this view
     // 
     [self refreshTopPlaces]; 
  
     // preserve selection between presentations.
-     self.clearsSelectionOnViewWillAppear = NO;
+	// user can tab away from top rated, example to recents or vacations, and our place selection is maintained
+	self.clearsSelectionOnViewWillAppear = NO;
     
 }
 
@@ -246,9 +246,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-       
-   
 }
 
 - (void)viewDidAppear:(BOOL)animated

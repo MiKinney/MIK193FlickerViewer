@@ -3,8 +3,9 @@
 //  FlickerViewer2
 //
 //  Created by Michael Kinney on 2/27/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
-//  TODO - this is all about having an activity indicator with a background, so it shows up
+//  Copyright (c) 2012 All rights reserved.
+//  this is all about having an activity indicator with a background, so it shows up
+//  todo - would think there's a simpler way ... without needing this class
 
 #import "MIKActivityIndicatorView.h"
 

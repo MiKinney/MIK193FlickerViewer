@@ -3,8 +3,11 @@
 //  FlickerViewer2
 //
 //  Created by Michael Kinney on 3/3/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012  All rights reserved.
 //
+//  Pretty much straight from Stanford example, except for minor changes on my part
+//  I did type all this in and not just copy it. 
+//  
 
 #import "PhotosMapAnnotation.h"
 #import "FlickrFetcher.h"

@@ -3,7 +3,7 @@
 //  FlickerViewer2
 //
 //  Created by Michael Kinney on 2/21/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 All rights reserved.
 //
 
 #import "DetailViewSelectorController.h"
@@ -33,10 +33,8 @@
 
 // view is a table of photo names and descriptions, user may select one
 //
-- (void) setSelectedPhoto:(NSDictionary *)selectedPhoto {
-    
+- (void) setSelectedPhoto:(NSDictionary *)selectedPhoto {    
     _selectedPhoto = selectedPhoto;
-    
 }
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -52,13 +50,14 @@
 {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
+    // todo release any cached data, images, etc that aren't in use.
 }
 
 
 // create a map annotation for every photo in this place - not part of map delegate
 // annotation provides map pins name and lat and long. location.... 
+// Refactor - based on original Stanford example, refactor to pull out of PhotosTableController
+// 
 - (NSArray *) mapAnnotations
 {
     NSMutableArray * annotations = [[NSMutableArray alloc] initWithCapacity:self.placePhotos.count];
@@ -72,40 +71,45 @@
 
 
 #pragma mark MapViewControllerDelegate
-// return the original photo dictionary item and the image retrieved, if any.
-// accesses net, so should be called from a worked thread
-// refactor, need to move the  dispatch queue for worker thread here... 
-// refractor, but problem using NSDictionary * and input to a block, compiler errors.. try again when refactoring
+
+// return the thumbnail image, if any,  for the photo and original photo dictionary item used in the annotation.
+// caution - this makes a net request, so call it from a background queue
+// Refactor - originally tried fetching using dispatch queue for worker thread here... 
+// Refactor - but using queue and blocks here caused problem using NSDictionary * and input to a block, compiler errors.. try again when refactoring
+// Refactor - actually want to remove this completely from PhotosTableViewController anyway and put in mapViewContoller, it's just the datasource is here..
 //
 - (NSDictionary *) mapViewController:(MapViewController *)sender imageForAnnotation:(id<MKAnnotation>)annotation
-{
-    
+{    
     NSMutableDictionary * photoAndImage = [[NSMutableDictionary alloc] init];
     
     if(![annotation isKindOfClass:[PhotosMapAnnotation class]])
         return photoAndImage; 
     
-    
-    PhotosMapAnnotation *pma = (PhotosMapAnnotation *)annotation;
-    
+    PhotosMapAnnotation *pma = (PhotosMapAnnotation *)annotation; 
+    // save the original requested photo along with the image, we use this to keep photo and images in sync on pin annotations
+	// 
     [photoAndImage setObject:pma.photo forKey:@"photo"];
-    
+	
+    // just format the url
     NSURL *url = [FlickrFetcher urlForPhoto:pma.photo format:FlickrPhotoFormatSquare];
-    NSData *data = [NSData dataWithContentsOfURL:url];
+	// fetch from the net
+    NSData *data = [NSData dataWithContentsOfURL:url]; // 
     
     if (data) {
         [photoAndImage setObject:[UIImage imageWithData:data] forKey:@"image"];   
     } else {
-        [photoAndImage setObject:[[NSNull alloc] init] forKey:@"image"];
+        [photoAndImage setObject:[[NSNull alloc] init] forKey:@"image"]; // note need in a Dictionary to use NSNUll here and not nil for the value
     }
      
     return photoAndImage;
-    
 }
 
+// Refactor - pull this out of PhotosTableViewController, so MapViewController is not tied to PhotosTableViewController
+// 
 - (MKCoordinateRegion) region;
 {
     MKCoordinateRegion region;
+	// get the lat and long for the top rated Place for these photos... 
     region.center.latitude = [[self.dataSourceDelegate.place objectForKey:FLICKR_LATITUDE] doubleValue];
     region.center.longitude = [[self.dataSourceDelegate.place objectForKey:FLICKR_LONGITUDE] doubleValue];
     return region;
@@ -218,6 +222,8 @@
 
 #pragma mark - View lifecycle
 
+// Refactor the dataModel is buried in here and I want to pull it out of the PhotosTableViewController completely
+// this is where we access Flicker on a background queue to get the photo dictionaries
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -246,8 +252,7 @@
     
     dispatch_queue_t downloadQueue = dispatch_queue_create("Flicker Fetch", NULL);
     dispatch_async(downloadQueue, ^{
-        
-        
+                
         // the results are returned in order of most tagged...     
         // bSelf.placePhotos = [FlickrFetcher photosInPlace:photoPlace maxResults:MAX_PLACE_PHOTOS];
         
@@ -298,18 +303,12 @@
     self.placePhotos = nil;
     self.selectedPhoto = nil;
     
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-    
-     [super viewDidUnload];
+	[super viewDidUnload];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    
-     
     
 }
 

@@ -1,22 +1,19 @@
 //
 //  MapViewController.m
-//  FlickerViewer2
+//  FlickerViewer
 //
 //  Created by Michael Kinney on 3/2/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 All rights reserved.
 //
 
 #import "DetailViewSelectorController.h"
 #import "MapViewController.h"
-#import "PhotoViewController.h"
-#import "PhotosTableViewController.h"
 #import "PhotosMapAnnotation.h"
 #import "PlacesMapAnnotation.h"
 #import "RecentPhotosTableViewController.h"
 
 
-
-@interface MapViewController() <PhotosDataSourceDelegate>
+@interface MapViewController() <PhotosDataSourceDelegate>  // Refactor to remove need to implement PhotosDataSourceDelegate, 
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (strong, nonatomic) MKAnnotationView * selectedAnnotationView;
@@ -61,14 +58,18 @@
 #pragma mark MKMapViewDelegate
 
 // setup pin annotations and calluts
+// note this has an image for both places and photos, but for places image is not supplied by flicker, 
+// refactor to remove leftCalloutAccessoryView for places
 - (MKAnnotationView*) mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation
 {
     MKAnnotationView * aView = [mapView dequeueReusableAnnotationViewWithIdentifier:@"MapVC"];
     if (!aView) {
         aView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"MapVC"];
         aView.canShowCallout = YES;
+		// disclosure button used for segues
         UIButton * rightButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];        
         aView.rightCalloutAccessoryView = rightButton;
+		
         aView.leftCalloutAccessoryView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)]; 
         // don't set the image yet, that's too expensive, wait until we actually show it later
         [(UIImageView *) aView.leftCalloutAccessoryView setImage:nil];
@@ -76,10 +77,10 @@
     }
         
     aView.annotation = annotation; // yes, setting this twice the first  time view's created.
-    
     return aView;
 }
 
+// if user is viewing photos map, get thumbnail image for selected pin 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)aView
 {
     self.selectedAnnotationView = aView; // save for later use by delegate callbacks for selected place and photos
@@ -87,7 +88,7 @@
     // since iOS reuses annnotation cells, if the user interacted with the map before we got the image back, such as by selecting another pin
     // then the annotations and thus photos may not match, so test view and annotation again may have changed, and we would be supplying the wrong image.
     // first of all, only do this for annotations with photos
-    //
+    // Refactor - consider moving this queue request out of the map view controller and into a  datamodel...
     if([self.selectedAnnotationView.annotation isKindOfClass:[PhotosMapAnnotation class]]) {
  
         dispatch_queue_t thumbNailQueue = dispatch_queue_create("ThumbnailQue", NULL);
@@ -130,6 +131,7 @@
 
     self.selectedAnnotationView = view; // save for later use by delegate callbacks for selected place and photos
 	
+	// on an iPad need access to the detail views...
 	DetailViewSelectorController *  detailViewSelectorController = [self.splitViewController.viewControllers lastObject];
     
     if (detailViewSelectorController){ // we're on an ipad, 
@@ -143,29 +145,32 @@
             [RecentPhotosTableViewController saveRecentPhoto:photosMapAnnotation.photo];
 
         } else if ([view.annotation isKindOfClass:[PlacesMapAnnotation class]]){
-            // we're showing the places annotations, so from here ideally I would want to show the photos map, 
-            // but cannot without refactoring, because photos map does not have direct access to data model, (because made flicker viewer in steps from Stanford exercises)
-            // so instead  we  segue to the photostableviewcontroller, which from what I see on iTunes U, this is the way they do it at Stanford.
+            // Refactor we're showing the places annotations, so from here ideally I would want to seque to the photos map, 
+            // but instead seguing to a photo table view, because it has access to the datamodel,  photos map does not have direct access to data model, 
+			// (because made flicker viewer in steps from Stanford exercises without thinking far enough ahead)
+            // so instead  we  segue to the photostableviewcontroller, which I really don't like...
             [self performSegueWithIdentifier:@"ShowPhotosTableView" sender:self];
         }
     } else { // iPhone
         if([view.annotation isKindOfClass:[PhotosMapAnnotation class]])
         {
             // for iPhone we have to force the segue to the photo view controller, unlike iPad, there is no detail view around
-                  
             [self performSegueWithIdentifier:@"ShowPhotoViewController" sender:self];
    
         } else if ([view.annotation isKindOfClass:[PlacesMapAnnotation class]]){
-            // we're showing the places annotations, so from here ideally I would want to show the photos map, 
-            // but cannot without refactoring, because photos map does not have direct access to data model, (because made flicker viewer in steps from Stanford exercises)
-            // so instead  we  segue to the photostableviewcontroller (
+			// Refactor we're showing the places annotations, so from here ideally I would want to seque to the photos map, 
+            // but instead seguing to a photo table view, because it has access to the datamodel,  photos map does not have direct access to data model, 
+			// (because made flicker viewer in steps from Stanford exercises without thinking far enough ahead)
+            // so instead  we  segue to the photostableviewcontroller, which I really don't like...
+			//
             [self performSegueWithIdentifier:@"ShowPhotosTableView" sender:self];
         } 
     }
 }
 
 
-// zoom to show pins
+// zoom map to show pins
+// todo - needs some work.  
 - (void) mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray *)views
 {
     if ([self.delegate respondsToSelector:@selector(region)])
@@ -208,8 +213,9 @@
 
 #pragma mark PhotosDataSourceDelegate
 // don't like this here in the map view particulary, 
-// but it's needed by the PhotosTableViewController, which we segue to from the map view...
-// 
+// but it's needed by the table controller, PhotosTableViewController, which 
+// we segue to directly from the places map view..
+// Refactor datamodel to remove this need...
 - (NSDictionary *) place {
     
     NSDictionary * selectedPlace = nil;
@@ -225,14 +231,19 @@
 
 
 #pragma mark segue
-// I'm programatically creating these segues, 
+// I'm programatically creating these segues in calloutAccessoryControlTapped
+// 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([segue.identifier isEqualToString:@"ShowPhotosTableView" ]) {
+		// Refactor - will not seque to a table view controller from the map view 
         PhotosTableViewController * destinationViewController = (PhotosTableViewController *) [segue destinationViewController];
-        destinationViewController.dataSourceDelegate = self;
+        destinationViewController.dataSourceDelegate = self; // Refactor
+		
     } else if ([segue.identifier isEqualToString:@"ShowPhotoViewController"]) {
+		
         PhotoViewController * photoViewController = (PhotoViewController *) [segue destinationViewController];
+		
         if ([self.selectedAnnotationView.annotation isKindOfClass:[PhotosMapAnnotation class]]) {
             PhotosMapAnnotation * photosMapAnnotation = (PhotosMapAnnotation *) self.selectedAnnotationView.annotation;  
             photoViewController.photo = photosMapAnnotation.photo; // the photo view controller needs this  

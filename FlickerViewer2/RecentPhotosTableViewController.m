@@ -3,7 +3,7 @@
 //  FlickerViewer2
 //
 //  Created by Michael Kinney on 2/28/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 All rights reserved.
 //
 
 #import "DetailViewSelectorController.h"
@@ -20,9 +20,8 @@
 
 // put's new photo at top of data model queue
 // prevents dups by removing any exisiting older photo from queue
-// saves que back to user defaults
+// saves queue back to user defaults
 // using standardUserDefaults storage here because it was influenced by the assignment.
-// since then I've learned more persistant storage options 
 //
 + (void) saveRecentPhoto: (NSDictionary *) photo{
     
@@ -30,7 +29,8 @@
     
     NSMutableArray * recentPhotos;
     
-    // storage
+    // storage uses NSUserDefaults, in a rewrite, I'd consider an alternative storage
+	// 
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
     NSArray *recents = [defaults arrayForKey:RECENT_PHOTOS_KEY];
     if(!recents) {
@@ -72,7 +72,7 @@
 - (void) viewWillAppear:(BOOL)animated{
     
     // behavior bug - in iPhone, this makes the recents list update every time user views photo from the same recent list, 
-    // because in iPhone, the nav controller is sequeing between the recents photos table list and the actual image file, which when we fetch the image file
+    // because in iPhone, the nav controller is segueing between the recents photos table list and the actual image file, which when we fetch the image file
     // I update the data model.... which is maybe where the bug is...
     //  get list of most recent photos viewed and update table view
     // 

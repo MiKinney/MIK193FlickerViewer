@@ -3,7 +3,7 @@
 //  FlickerViewer2
 //
 //  Created by Michael Kinney on 3/19/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c)  All rights reserved.
 //
 
 #import "VacationPhotoViewController.h"
@@ -23,8 +23,7 @@
 // setup to load the image when we don't have a flicker photo dictionary but instead already have photo info 
 // added this method to support display of photo info stored in core data
 //
-- (void) setPhoto:(Photo*) photo {
-    
+- (void) setPhoto:(Photo*) photo {    
    
     // photoURL is stored as string in core data
     NSURL * url = [NSURL URLWithString:photo.photoURL];
@@ -47,10 +46,9 @@
     
 }
 
-// add or remove presently displayed photo from vacation
+// remove presently displayed vacation photo from vacation
 // 
 - (IBAction)visitButtonTouched:(UIBarButtonItem *)sender {
-    
     
     // do this everytime view appears, just in case selected vacation name changes
     VacationDocument * document = [Vacations getOpenManagedVacation];
@@ -72,7 +70,6 @@
             // since view is now gone, it's doesn't make sense to show anything
         }  
     }
-    
 }
 
 

@@ -3,7 +3,7 @@
 //  FlickerViewer2
 //
 //  Created by Michael Kinney on 3/16/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 All rights reserved.
 // displays list of all tags for all photos in a given vacation 
 // allows selecting a tag to see list of photos associated with that tag
 

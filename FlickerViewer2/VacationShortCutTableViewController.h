@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 //  shows two staic cells an Itinerary and a Photo Tag static cell ( per Stanford assignment requirements )
-//  allows user to select and look at an Itineary View of places or the other for a given vacationName
+//  allows user to select and look at an Itineary View of places or Taqs for a given vacationName
 // 
 //  Refactor : alternative ways to table view display, could be: 1. Adding two toolbar buttons or items that 'flips the view' of the vacation,
 //             with two buttons, single touch from view a vacation in Itinerary display mode of places or vacation, or touch to see associated photo tags, 

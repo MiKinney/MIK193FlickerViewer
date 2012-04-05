@@ -3,7 +3,7 @@
 //  FlickerViewer2
 //
 //  Created by Michael Kinney on 3/3/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 All rights reserved.
 //
 
 #import "PlacesMapAnnotation.h"
@@ -24,7 +24,7 @@
 
 #pragma mark MKAnnotation
 // map delegate calls into us for info to update it's annotation for this object
-
+// title is place's city name
 - (NSString*) title
 {
     NSString * fullPlaceName = [self.place objectForKey:(FLICKR_PLACE_NAME)];
@@ -38,6 +38,7 @@
     
 }
 
+// subtitle is location, example state, country
 - (NSString *) subtitle
 {
     NSString * fullPlaceName = [self.place objectForKey:(FLICKR_PLACE_NAME)];
@@ -55,7 +56,7 @@
     
 }
 
-
+// coordinates for the map
 - (CLLocationCoordinate2D) coordinate
 {
     CLLocationCoordinate2D coordinate;
