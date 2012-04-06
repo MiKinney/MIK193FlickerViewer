@@ -1,7 +1,7 @@
 FlickerViewer
 =============
 
-FlickerViewer is based on homework assignments from Stanford's CS193P iPhone / iPad Development Class. It allows users to access Flicker to view photos from today's top rated cities and store favorite photos for later viewing. I am adding functionality beyond the original assignments and regularly refactor to improve the code and the User Experience. 
+FlickerViewer is based on homework assignments from Stanford's CS193P iPhone / iPad Development Class. It allows users to access Flicker to view photos from today's top rated cities and store favorite photos for later viewing. I have and continue to add functionality beyond the original assignments and regularly refactor to improve the code and the User Experience. 
 
 This app features :
 
@@ -11,7 +11,7 @@ Table and Map Views of Top Rated Cities
 
 Table and Map Views of Photos from a Selected City
 
-View any photo listed in table or by touching a pin in a map view.
+View any photo using a table view or using map view.
 
 Table view of recently browsed photos (persisted and cached)
 
@@ -21,13 +21,15 @@ View photos from any vacation by location or tags and remove any photo
 
 Tab bar to switch between Top Rated, Recently Browsed, and Vacations
 
+Works in Landscape and Portrait orientations
+
 Technical Features :
 
 iOS 5.1
 
 Frameworks, Model-View-Controller and Storyboards
 
-ARC, Blocks, Categories, Collections, Cocoa Touch, Core Data, Delegates, Fetch Request, File Sys- tem, Foundation Framework, Grand Central Dispatch, Gestures, Introspection, MapKit, MKAnnotation, MKAnnotationView, Model-View-Controller, Multithreading, Objective-C, Outlets, Predicates, Persistence, Properties, Segues, Sort Descriptors, Storyboards, Target-Action and UIKit (including : UIActivityIndicatorView, UIAlertView, UIBarButtonItem, UIImage, UIImageView, UIManagedDocument, UINavigationController, UIPopOverController, UIScrollView, UISplitViewController, UITabBarController, UITableViewController, UIViewController) 
+ARC, Blocks, Categories, Collections, Cocoa Touch, Core Data, Delegates, Fetch Request, File System, Foundation Framework, Grand Central Dispatch, Gestures, Introspection, MapKit, MKAnnotation, MKAnnotationView, Model-View-Controller, Multithreading, Objective-C, Outlets, Predicates, Persistence, Properties, Segues, Sort Descriptors, Storyboards, Target-Action and UIKit (including : UIActivityIndicatorView, UIAlertView, UIBarButtonItem, UIImage, UIImageView, UIManagedDocument, UINavigationController, UIPopOverController, UIScrollView, UISplitViewController, UITabBarController, UITableViewController, UIViewController) 
 
 Upcoming in a future release :
 
