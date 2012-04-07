@@ -1,9 +1,9 @@
 FlickerViewer
 =============
 
-FlickerViewer is based on homework assignments from Stanford's CS193P iPhone / iPad Development Class. It allows users to access Flicker to view photos from today's top rated cities and store favorite photos for later viewing. I have and continue to add functionality beyond the original assignments and regularly refactor to improve the code and the User Experience. 
+(Note : This is exercise code, it showcases different approaches to solving app requirements in an iOS environment. I'm using the project as a 'development bed' to try things. No intention to make this a shippable App.  That's for the next project)  
 
-This app features :
+FlickerViewer is based on homework assignments from Stanford's CS193P iPhone / iPad Development Class. It allows users to access Flicker to view photos from today's top rated cities and store favorite photos for later viewing. I have and continue to add functionality beyond the original assignments and regularly refactor to improve the code and the User Experience. 
 
 Runs on the iPad and iPhone
 
